@@ -31,29 +31,33 @@ class ServiceHealthCheck implements HealthCheck
      * @param string $serviceName
      * @param string $serviceUrl
      *
-     * @return array
+     * @return HealthCheckResponse
      */
-    protected function checkService(string $serviceName, string $serviceUrl): array
+    protected function checkService(string $serviceName, string $serviceUrl): HealthCheckResponse
     {
         try {
             $response = $this->client->get($serviceUrl);
 
             if (null !== $response) {
-                return [
-                    'status' => $response->getStatusCode(),
-                    'data' => $response->getBody()->getContents(),
-                ];
+                return new HealthCheckResponse($response->getStatusCode(), $response->getBody()->getContents());
+//                return [
+//                    'status' => $response->getStatusCode(),
+//                    'data' => $response->getBody()->getContents(),
+//                ];
             }
 
-            return [
-                'status' => 500,
-                'data' => 'Fatal error checking service: ' . $serviceName,
-            ];
+            return new HealthCheckResponse(500, 'Fatal error checking service: ' . $serviceName);
+
+//            return [
+//                'status' => 500,
+//                'data' => 'Fatal error checking service: ' . $serviceName,
+//            ];
         } catch (RequestException $exception) {
-            return [
-                'status' => 500,
-                'data' => 'Request failed for service: ' . $serviceName,
-            ];
+            return new HealthCheckResponse(500, 'Request failed for service: ' . $serviceName);
+//            return [
+//                'status' => 500,
+//                'data' => 'Request failed for service: ' . $serviceName,
+//            ];
         }
     }
 
@@ -65,42 +69,18 @@ class ServiceHealthCheck implements HealthCheck
     public function getServiceStatuses(): Response
     {
         $responses = [];
+        $responseData = [];
 
         foreach ($this->services as $serviceName => $serviceUrl) {
-            $responses[$serviceName] = $this->checkService($serviceName, $serviceUrl);
+            $response = $this->checkService($serviceName, $serviceUrl);
+            $responses[$serviceName] = $response;
+            $responseData[$serviceName] = $response->toArray();
         }
 
         return new Response(
             (new WorstCaseStatusCode())->getWorstCaseStatusCode($responses),
             [],
-            json_encode($responses)
+            json_encode($responseData)
         );
-    }
-
-    /**
-     * Load services config
-     *
-     * @param string $configFile
-     * @param string $section
-     *
-     * @return array
-     */
-    public function loadConfig(string $configFile, string $section): array
-    {
-        if (!file_exists($configFile)) {
-            throw new ConfigNotFoundException('Config file [' . $configFile . '] not found');
-        }
-
-        $services = Yaml::parseFile($configFile);
-
-        if (null === $services) {
-            throw new InvalidConfigException('Config file [' . $configFile . '] is invalid');
-        }
-
-        if (array_key_exists($section, $services)) {
-            return $services[$section];
-        }
-
-        return [];
     }
 }

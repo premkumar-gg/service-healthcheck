@@ -32,7 +32,8 @@
   },
   "autoload": {
     "psr-4": {
-      "Giffgaff\\ServiceHealthCheck\\": "src/"
+      "Giffgaff\\ServiceHealthCheck\\": "src/",
+      "Tests\\": "tests/"
     }
   }
 }

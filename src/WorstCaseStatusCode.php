@@ -29,7 +29,8 @@ class WorstCaseStatusCode
         $worstCaseIndex = \count(self::$statusCodeSeverityMap) - 1;
 
         foreach ($responses as $response) {
-            $statusCode = $response['status'];
+            /** @var HealthCheckResponse $response */
+            $statusCode = $response->getStatusCode();
 
             switch (((string)$statusCode)[0]) {
                 case '5':

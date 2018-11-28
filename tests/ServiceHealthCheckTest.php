@@ -1,9 +1,9 @@
 <?php
+namespace Tests;
 
-use Giffgaff\ServiceHealthCheck\Exception\ConfigNotFoundException;
-use Giffgaff\ServiceHealthCheck\Exception\InvalidConfigException;
 use Giffgaff\ServiceHealthCheck\ServiceHealthCheck;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\Yaml\Yaml;
 
 class ServiceHealthCheckTest extends TestCase
 {
@@ -70,24 +70,8 @@ class ServiceHealthCheckTest extends TestCase
     /** @test */
     public function loadingConfigReturnsAPopulatedArray(): void
     {
-        $config = $this->healthCheck->loadConfig(__DIR__ . '/_config/test_config.yml', 'services');
+        $config = Yaml::parseFile(__DIR__ . '/_config/test_config.yml');
 
-        $this->assertCount(3, $config);
-    }
-
-    /** @test */
-    public function missingConfigFileThrowsException(): void
-    {
-        $this->expectException(ConfigNotFoundException::class);
-
-        $this->healthCheck->loadConfig('missing_file.yml', 'services');
-    }
-
-    /** @test */
-    public function invalidConfigFileThrowsException(): void
-    {
-        $this->expectException(InvalidConfigException::class);
-
-        $this->healthCheck->loadConfig(__DIR__ . '/_config/invalid_config.yml', 'services');
+        $this->assertCount(3, $config['services']);
     }
 }

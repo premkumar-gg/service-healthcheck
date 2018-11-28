@@ -17,14 +17,4 @@ interface HealthCheck
      * @return Response
      */
     public function getServiceStatuses(): Response;
-
-    /**
-     * Load services config
-     *
-     * @param string $configFile
-     * @param string $section
-     *
-     * @return array
-     */
-    public function loadConfig(string $configFile, string $section): array;
 }
