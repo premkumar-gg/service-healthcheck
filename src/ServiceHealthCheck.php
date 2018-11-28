@@ -63,7 +63,7 @@ class ServiceHealthCheck
             $responses[$serviceName] = $this->checkService($serviceUrl);
         }
 
-        return new Response(200 , [], json_encode($responses));
+        return new Response(200, [], json_encode($responses));
     }
 
     /**
@@ -79,7 +79,7 @@ class ServiceHealthCheck
             throw new ConfigNotFoundException('Config file [' . $configFile . '] not found');
         }
 
-        $services = Yaml::parseFile($configFile);
+        $services = (new Yaml())->parseFile($configFile);
 
         if (null === $services) {
             throw new InvalidConfigException('Config file [' . $configFile . '] is invalid');

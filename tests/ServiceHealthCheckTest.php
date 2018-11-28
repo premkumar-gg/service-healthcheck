@@ -54,7 +54,7 @@ class ServiceHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function invalidConfigFileThrowsException()
+    public function invalidConfigFileThrowsException(): void
     {
         $this->expectException(InvalidConfigException::class);
 
