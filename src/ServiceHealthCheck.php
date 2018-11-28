@@ -8,7 +8,7 @@ use Icawebdesign\ServiceHealthCheck\Exception\ConfigNotFoundException;
 use Icawebdesign\ServiceHealthCheck\Exception\InvalidConfigException;
 use Symfony\Component\Yaml\Yaml;
 
-class ServiceHealthCheck
+class ServiceHealthCheck implements HealthCheck
 {
     /**
      * @var \GuzzleHttp\Client
@@ -81,10 +81,11 @@ class ServiceHealthCheck
      * Load services config
      *
      * @param string $configFile
+     * @param string $section
      *
      * @return array
      */
-    public function loadConfig(string $configFile): array
+    public function loadConfig(string $configFile, string $section): array
     {
         if (!file_exists($configFile)) {
             throw new ConfigNotFoundException('Config file [' . $configFile . '] not found');
@@ -96,8 +97,8 @@ class ServiceHealthCheck
             throw new InvalidConfigException('Config file [' . $configFile . '] is invalid');
         }
 
-        if (array_key_exists('services', $services)) {
-            return $services['services'];
+        if (array_key_exists($section, $services)) {
+            return $services[$section];
         }
 
         return [];

@@ -67,7 +67,7 @@ class ServiceHealthCheckTest extends TestCase
     /** @test */
     public function loadingConfigReturnsAPopulatedArray(): void
     {
-        $config = $this->healthCheck->loadConfig(__DIR__ . '/_config/test_config.yml');
+        $config = $this->healthCheck->loadConfig(__DIR__ . '/_config/test_config.yml', 'services');
 
         $this->assertCount(3, $config);
     }
@@ -77,7 +77,7 @@ class ServiceHealthCheckTest extends TestCase
     {
         $this->expectException(ConfigNotFoundException::class);
 
-        $this->healthCheck->loadConfig('missing_file.yml');
+        $this->healthCheck->loadConfig('missing_file.yml', 'services');
     }
 
     /** @test */
@@ -85,6 +85,6 @@ class ServiceHealthCheckTest extends TestCase
     {
         $this->expectException(InvalidConfigException::class);
 
-        $this->healthCheck->loadConfig(__DIR__ . '/_config/invalid_config.yml');
+        $this->healthCheck->loadConfig(__DIR__ . '/_config/invalid_config.yml', 'services');
     }
 }
