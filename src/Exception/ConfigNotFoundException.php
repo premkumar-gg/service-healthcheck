@@ -1,6 +1,6 @@
 <?php
 
-namespace Icawebdesign\ServiceHealthCheck\Exception;
+namespace Giffgaff\ServiceHealthCheck\Exception;
 
 class ConfigNotFoundException extends \RuntimeException implements Exception
 {

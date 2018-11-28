@@ -17,7 +17,7 @@ class WorstCaseStatusCodeTest extends TestCase
             ['status' => 200, 'data' => 'test1'],
             ['status' => 200, 'data' => 'test2'],
         ];
-        $worstCaseStatusCode = new \Icawebdesign\ServiceHealthCheck\WorstCaseStatusCode();
+        $worstCaseStatusCode = new \Giffgaff\ServiceHealthCheck\WorstCaseStatusCode();
         $this->assertEquals(200, $worstCaseStatusCode->getWorstCaseStatusCode($response));
     }
 
@@ -29,7 +29,7 @@ class WorstCaseStatusCodeTest extends TestCase
             ['status' => 200, 'data' => 'test1'],
             ['status' => 403, 'data' => 'test2'],
         ];
-        $worstCaseStatusCode = new \Icawebdesign\ServiceHealthCheck\WorstCaseStatusCode();
+        $worstCaseStatusCode = new \Giffgaff\ServiceHealthCheck\WorstCaseStatusCode();
         $this->assertEquals(403, $worstCaseStatusCode->getWorstCaseStatusCode($response));
     }
 
@@ -41,7 +41,7 @@ class WorstCaseStatusCodeTest extends TestCase
             ['status' => 500, 'data' => 'test1'],
             ['status' => 503, 'data' => 'test2'],
         ];
-        $worstCaseStatusCode = new \Icawebdesign\ServiceHealthCheck\WorstCaseStatusCode();
+        $worstCaseStatusCode = new \Giffgaff\ServiceHealthCheck\WorstCaseStatusCode();
         $this->assertEquals(500, $worstCaseStatusCode->getWorstCaseStatusCode($response));
     }
 }

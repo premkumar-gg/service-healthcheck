@@ -6,7 +6,7 @@
  * @since 27/11/2018
  */
 
-namespace Icawebdesign\ServiceHealthCheck\Exception;
+namespace Giffgaff\ServiceHealthCheck\Exception;
 
 class InvalidConfigException extends \RuntimeException implements Exception
 {

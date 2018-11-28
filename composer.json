@@ -1,5 +1,5 @@
 {
-  "name": "Service HealthCheck",
+  "name": "giffgaff/service-healthcheck",
   "version": "1.0.0",
   "description": "Service health checker.",
   "keywords": [
@@ -28,7 +28,7 @@
   },
   "autoload": {
     "psr-4": {
-      "Icawebdesign\\ServiceHealthCheck\\": "src/"
+      "Giffgaff\\ServiceHealthCheck\\": "src/"
     }
   }
 }

@@ -1,8 +1,8 @@
 <?php
 
-use Icawebdesign\ServiceHealthCheck\Exception\ConfigNotFoundException;
-use Icawebdesign\ServiceHealthCheck\Exception\InvalidConfigException;
-use Icawebdesign\ServiceHealthCheck\ServiceHealthCheck;
+use Giffgaff\ServiceHealthCheck\Exception\ConfigNotFoundException;
+use Giffgaff\ServiceHealthCheck\Exception\InvalidConfigException;
+use Giffgaff\ServiceHealthCheck\ServiceHealthCheck;
 use PHPUnit\Framework\TestCase;
 
 class ServiceHealthCheckTest extends TestCase
@@ -16,6 +16,9 @@ class ServiceHealthCheckTest extends TestCase
      */
     protected $services;
 
+    /**
+     *
+     */
     public function setUp()
     {
         $this->services = [

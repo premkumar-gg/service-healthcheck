@@ -1,11 +1,11 @@
 <?php
 
-namespace Icawebdesign\ServiceHealthCheck;
+namespace Giffgaff\ServiceHealthCheck;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
-use Icawebdesign\ServiceHealthCheck\Exception\ConfigNotFoundException;
-use Icawebdesign\ServiceHealthCheck\Exception\InvalidConfigException;
+use Giffgaff\ServiceHealthCheck\Exception\ConfigNotFoundException;
+use Giffgaff\ServiceHealthCheck\Exception\InvalidConfigException;
 use Symfony\Component\Yaml\Yaml;
 
 class ServiceHealthCheck implements HealthCheck

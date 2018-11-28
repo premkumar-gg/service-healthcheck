@@ -5,7 +5,7 @@
  * @author
  */
 
-namespace Icawebdesign\ServiceHealthCheck;
+namespace Giffgaff\ServiceHealthCheck;
 
 class WorstCaseStatusCode
 {

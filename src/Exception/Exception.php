@@ -1,6 +1,6 @@
 <?php
 
-namespace Icawebdesign\ServiceHealthCheck\Exception;
+namespace Giffgaff\ServiceHealthCheck\Exception;
 
 /**
  * @method string getMessage()

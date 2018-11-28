@@ -5,7 +5,7 @@
  * @author
  */
 
-namespace Icawebdesign\ServiceHealthCheck;
+namespace Giffgaff\ServiceHealthCheck;
 
 use GuzzleHttp\Psr7\Response;
 
