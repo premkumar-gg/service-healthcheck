@@ -4,9 +4,6 @@ namespace Giffgaff\ServiceHealthCheck;
 
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
-use Giffgaff\ServiceHealthCheck\Exception\ConfigNotFoundException;
-use Giffgaff\ServiceHealthCheck\Exception\InvalidConfigException;
-use Symfony\Component\Yaml\Yaml;
 
 class ServiceHealthCheck implements HealthCheck
 {
@@ -40,24 +37,11 @@ class ServiceHealthCheck implements HealthCheck
 
             if (null !== $response) {
                 return new HealthCheckResponse($response->getStatusCode(), $response->getBody()->getContents());
-//                return [
-//                    'status' => $response->getStatusCode(),
-//                    'data' => $response->getBody()->getContents(),
-//                ];
             }
 
             return new HealthCheckResponse(500, 'Fatal error checking service: ' . $serviceName);
-
-//            return [
-//                'status' => 500,
-//                'data' => 'Fatal error checking service: ' . $serviceName,
-//            ];
         } catch (RequestException $exception) {
             return new HealthCheckResponse(500, 'Request failed for service: ' . $serviceName);
-//            return [
-//                'status' => 500,
-//                'data' => 'Request failed for service: ' . $serviceName,
-//            ];
         }
     }
 
