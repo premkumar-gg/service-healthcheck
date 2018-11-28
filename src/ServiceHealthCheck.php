@@ -2,6 +2,7 @@
 
 namespace Icawebdesign\ServiceHealthCheck;
 
+use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 use Icawebdesign\ServiceHealthCheck\Exception\ConfigNotFoundException;
 use Icawebdesign\ServiceHealthCheck\Exception\InvalidConfigException;
@@ -27,27 +28,33 @@ class ServiceHealthCheck
     /**
      * Check then health status of a remote service API
      *
+     * @param string $serviceName
      * @param string $serviceUrl
      *
      * @return array
      */
-    protected function checkService(string $serviceUrl): array
+    protected function checkService(string $serviceName, string $serviceUrl): array
     {
-        $response = $this->client->get($serviceUrl);
+        try {
+            $response = $this->client->get($serviceUrl);
 
-        if (null !== $response) {
-            $data = [
-                'status' => $response->getStatusCode(),
-                'data' => $response->getBody()->getContents(),
+            if (null !== $response) {
+                return [
+                    'status' => $response->getStatusCode(),
+                    'data' => $response->getBody()->getContents(),
+                ];
+            }
+
+            return [
+                'status' => 500,
+                'data' => 'Fatal error checking service: ' . $serviceName,
             ];
-
-            return $data;
+        } catch (RequestException $exception) {
+            return [
+                'status' => 500,
+                'data' => 'Request failed for service: ' . $serviceName,
+            ];
         }
-
-        return [
-            'status' => 500,
-            'data' => null,
-        ];
     }
 
     /**
@@ -60,10 +67,14 @@ class ServiceHealthCheck
         $responses = [];
 
         foreach ($this->services as $serviceName => $serviceUrl) {
-            $responses[$serviceName] = $this->checkService($serviceUrl);
+            $responses[$serviceName] = $this->checkService($serviceName, $serviceUrl);
         }
 
-        return new Response(200, [], json_encode($responses));
+        return new Response(
+            (new WorstCaseStatusCode())->getWorstCaseStatusCode($responses),
+            [],
+            json_encode($responses)
+        );
     }
 
     /**
@@ -79,7 +90,7 @@ class ServiceHealthCheck
             throw new ConfigNotFoundException('Config file [' . $configFile . '] not found');
         }
 
-        $services = (new Yaml())->parseFile($configFile);
+        $services = Yaml::parseFile($configFile);
 
         if (null === $services) {
             throw new InvalidConfigException('Config file [' . $configFile . '] is invalid');
