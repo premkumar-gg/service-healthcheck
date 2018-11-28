@@ -1,0 +1,4 @@
+services:
+  todos: "https://jsonplaceholder.typicode.com/todos/1"
+  albums: "https://jsonplaceholder.typicode.com/albums"
+  users: "https://jsonplaceholder.typicode.com/users"
