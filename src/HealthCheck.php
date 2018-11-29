@@ -9,6 +9,8 @@ namespace Giffgaff\ServiceHealthCheck;
 
 interface HealthCheck
 {
+    public function __construct(string $serviceName);
+
     /**
      * Returns the status of a service
      *
