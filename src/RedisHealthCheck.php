@@ -12,24 +12,24 @@ use Predis\Client;
 
 class RedisHealthCheck implements HealthCheck
 {
-    protected $redis;
+    /**
+     * @var array
+     */
+    protected $clients;
 
-    public function __construct(string $host, int $port = 6379, string $scheme = 'tcp')
+    public function __construct(array $clients)
     {
-        try {
-            $this->redis = new Client([
-                'scheme' => $scheme,
-                'host' => $host,
-                'port' => $port,
-            ]);
-        } catch (\RuntimeException $exception) {
-            return new Response([
-                503,
-                [],
-                json_encode(['data' => 'Failed to make connection to redis server']),
-            ]);
+        $this->clients = $clients;
+    }
+
+    public function __destruct()
+    {
+        foreach ($this->clients as $client) {
+            /** @var Client $client */
+            $client->disconnect();
         }
     }
+
     /**
      * Return collection of service statuses
      *
@@ -37,21 +37,37 @@ class RedisHealthCheck implements HealthCheck
      */
     public function getServiceStatuses(): Response
     {
-        $this->redis->set('test-message', 'YES');
-        $value = $this->redis->get('test-message');
+        $responses = [];
+        $responseData = [];
 
-        if ('YES' === $value) {
-            return new Response([
-                200,
-                [],
-                json_encode(['data' => 'Message successfully stored and retrieved']),
-            ]);
+        foreach ($this->clients as $client) {
+            /** @var Client $client */
+            $client->set('test-message', 'YES');
+            $value = $client->get('test-message');
+
+            if ('YES' === $value) {
+                $response = new HealthCheckResponse(
+                    200,
+                    'Message successfully stored and retrieved'
+                );
+                $responses[] = $response;
+                $responseData[] = $response->toArray();
+
+                continue;
+            }
+
+            $response = new HealthCheckResponse(
+                500,
+                'Failed to store and retrieve message'
+            );
+            $responses[] = $response;
+            $responseData[] = $response->toArray();
         }
 
-        return new Response([
-            500,
+        return new Response(
+            (new WorstCaseStatusCode())->getWorstCaseStatusCode($responses),
             [],
-            json_encode(['data' => 'Failed to store and retrieve message']),
-        ]);
+            json_encode($responseData)
+        );
     }
 }
