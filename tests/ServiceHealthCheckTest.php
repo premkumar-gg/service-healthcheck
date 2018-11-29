@@ -1,9 +1,13 @@
 <?php
 namespace Tests;
 
+use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
+use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
 use Giffgaff\ServiceHealthCheck\ServiceHealthCheck;
+use GuzzleHttp\Client;
+use GuzzleHttp\Psr7\Request;
 use PHPUnit\Framework\TestCase;
-use Symfony\Component\Yaml\Yaml;
 
 class ServiceHealthCheckTest extends TestCase
 {
@@ -11,37 +15,48 @@ class ServiceHealthCheckTest extends TestCase
      * @var ServiceHealthCheck
      */
     protected $healthCheck;
+
     /**
      * @var array
      */
     protected $services;
 
     /**
+     * @return HttpClientHealthCheck|\Mockery\MockInterface
+     */
+    protected function getMockedHttpClientHealthCheck()
+    {
+        $mock = \Mockery::mock(HttpClientHealthCheck::class);
+        $mock->shouldReceive('setClient')->once()->andReturn();
+        $mock->shouldReceive('setRequest')->once()->andReturn();
+        $mock->setClient(new Client());
+        return $mock;
+    }
+
+    /**
      *
      */
     public function setUp()
     {
+        $service1Mock = $this->getMockedHttpClientHealthCheck();
+        $service1Mock->shouldReceive('getServiceStatus')->once()->andReturn(
+            new HealthCheckResponse(200, 'positive response')
+        );
+        $service1Mock->setRequest(new Request('GET', 'http://service1'));
+
+        $service2Mock = $this->getMockedHttpClientHealthCheck();
+        $service2Mock->shouldReceive('getServiceStatus')->once()->andReturn(
+            new HealthCheckResponse(403, 'negative response')
+        );
+        $service2Mock->setRequest(new Request('GET', 'http://service2'));
+
         $this->services = [
-            'service1' => 'http://service1',
-            'service2' => 'http://service2',
-            'service3' => 'http://service3',
-            'service4' => 'http://service4',
+            'service1' => $service1Mock,
+            'service2' => $service2Mock,
+
         ];
 
-        $expectedBody = 'test';
-
-        $mock = new \GuzzleHttp\Handler\MockHandler([
-            new \GuzzleHttp\Psr7\Response(200, [], $expectedBody),
-            new \GuzzleHttp\Psr7\Response(403, [], $expectedBody),
-            new \GuzzleHttp\Psr7\Response(404, [], $expectedBody),
-            new \GuzzleHttp\Exception\RequestException(
-                'Cannot connect to server',
-                new \GuzzleHttp\Psr7\Request('GET', 'test')
-            ),
-        ]);
-
-        $client = new \GuzzleHttp\Client(['handler' => $mock]);
-        $this->healthCheck = new ServiceHealthCheck($client, $this->services);
+        $this->healthCheck = new ServiceHealthCheck($this->services);
 
         parent::setUp();
     }
@@ -51,7 +66,7 @@ class ServiceHealthCheckTest extends TestCase
     {
         $response = $this->healthCheck->getServiceStatuses();
 
-        $this->assertEquals(500, $response->getStatusCode());
+        $this->assertEquals(403, $response->getStatusCode());
     }
 
     /** @test */
@@ -59,19 +74,22 @@ class ServiceHealthCheckTest extends TestCase
     {
         $response = $this->healthCheck->getServiceStatuses();
 
-        $expectedBody = '{"service1":{"status":200,"data":"test"},'
-                        . '"service2":{"status":403,"data":"test"},'
-                        . '"service3":{"status":404,"data":"test"},'
-                        . '"service4":{"status":500,"data":"Request failed for service: service4"}}';
+        $expectedBody = '{"service1":{"status":200,"data":"positive response"},'
+                        . '"service2":{"status":403,"data":"negative response"}}';
 
         $this->assertEquals($expectedBody, $response->getBody()->getContents());
     }
 
     /** @test */
-    public function loadingConfigReturnsAPopulatedArray(): void
+    public function whenOneHealthCheckInstanceIsNotValidThrowsException(): void
     {
-        $config = Yaml::parseFile(__DIR__ . '/_config/test_config.yml');
+        $this->expectException(InvalidOperationException::class);
 
-        $this->assertCount(3, $config['services']);
+        $services = [
+            'service1' => 'invalid-service-instance--should-be-instanceof-HealthCheck-interface'
+        ];
+        $healthCheck = new ServiceHealthCheck($services);
+
+        $response = $healthCheck->getServiceStatuses();
     }
 }
