@@ -1,8 +1,8 @@
 <?php
 /**
- * {description}
+ * Response for health check
  *
- * @author
+ * @author Ian H <ian@ianh.io>
  */
 
 namespace Giffgaff\ServiceHealthCheck;

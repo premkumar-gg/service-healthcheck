@@ -1,20 +1,18 @@
 <?php
 /**
- * {description}
+ * Interface for a service health check
  *
- * @author
+ * @author Ian H. <ian@ianh.io>
  */
 
 namespace Giffgaff\ServiceHealthCheck;
 
-use GuzzleHttp\Psr7\Response;
-
 interface HealthCheck
 {
     /**
-     * Return collection of service statuses
+     * Returns the status of a service
      *
-     * @return Response
+     * @return HealthCheckResponse
      */
-    public function getServiceStatuses(): Response;
+    public function getServiceStatus(): HealthCheckResponse;
 }

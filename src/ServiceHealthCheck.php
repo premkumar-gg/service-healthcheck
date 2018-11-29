@@ -5,7 +5,7 @@ namespace Giffgaff\ServiceHealthCheck;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Response;
 
-class ServiceHealthCheck implements HealthCheck
+class ServiceHealthCheck
 {
     /**
      * @var \GuzzleHttp\Client
