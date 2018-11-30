@@ -45,7 +45,7 @@ class WorstCaseStatusCode
             }
 
             foreach (self::$statusCodeSeverityMap as $index => $indexValue) {
-                if ($index < $worstCaseIndex && ($code === (string)self::$statusCodeSeverityMap[$index])) {
+                if (($index < $worstCaseIndex) && ($code === (string)$indexValue)) {
                     $worstCaseIndex = $index;
                     $worstStatusCode = $statusCode;
                     break;
