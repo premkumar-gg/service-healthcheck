@@ -22,8 +22,8 @@ class RedisHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnTrue();
         $mock->shouldReceive('get')->once()->andReturn('YES');
 
-        $redis = new RedisHealthCheck([$mock]);
-        $response = $redis->getServiceStatuses();
+        $redis = new RedisHealthCheck('sampleService');
+        $response = $redis->getServiceStatus();
         $body = $response->getBody()->getContents();
 
         $this->assertEquals(200, $response->getStatusCode());
