@@ -36,3 +36,4 @@ jobs:
       - run:
           name: Run Unit tests
           command: vendor/bin/phpunit --configuration phpunit.xml --colors=never --coverage-text
+
