@@ -1,7 +1,7 @@
 version: 2
 jobs:
   build:
-    working_directory: /var/www/html
+    working_directory: /var/app/service-healthcheck
     docker:
       - image: vesica/php72
     steps:
