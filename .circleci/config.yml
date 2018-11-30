@@ -3,7 +3,7 @@ jobs:
   build:
     working_directory: /var/www/html
     docker:
-      - image: 2up/php71-fpm:1.0.3
+      - image: vesica/php72
     steps:
       - run:
           name: Install system packages
