@@ -39,13 +39,13 @@ class HttpClientHealthCheck implements HealthCheck
      */
     public function getServiceStatus(): HealthCheckResponse
     {
-        if (!isset($this->client)) {
+        if (null === $this->client) {
             throw new InvalidOperationException(
                 '$client is not set. Use setClient method to set the client before calling getServiceStatus.'
             );
         }
 
-        if (!isset($this->request)) {
+        if (null === $this->request) {
             throw new InvalidOperationException(
                 '$request is not set. Use setRequest method to set the request before calling getServiceStatus.'
             );

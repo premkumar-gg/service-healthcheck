@@ -19,14 +19,14 @@ use PHPUnit\Framework\TestCase;
 class HttpClientHealthCheckTest extends TestCase
 {
     /** @test */
-    public function implementsHealthCheck()
+    public function implementsHealthCheck(): void
     {
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $this->assertContains(HealthCheck::class, class_implements($httpClientHealthCheck));
     }
 
     /** @test */
-    public function whenClientNotSetThrowsException()
+    public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
@@ -43,7 +43,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestMadeWithValidUriOnlyReturnsAHealthCheckResponse()
+    public function whenRequestMadeWithValidUriOnlyReturnsAHealthCheckResponse(): void
     {
         // setup
         $mock = new MockHandler([
@@ -62,7 +62,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestSetWithHeadersClientMakesRequestWithHeaders()
+    public function whenRequestSetWithHeadersClientMakesRequestWithHeaders(): void
     {
         // setup
         $requestHeaders = [
@@ -87,7 +87,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestSetWithBodyClientMakesRequestWithBody()
+    public function whenRequestSetWithBodyClientMakesRequestWithBody(): void
     {
         // setup
         $requestBody = 'test-request-body';
@@ -108,7 +108,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestFailsFatally500StatusIsReceived()
+    public function whenRequestFailsFatally500StatusIsReceived(): void
     {
         // setup
         $requestBody = 'test-request-body';
