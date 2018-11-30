@@ -12,7 +12,7 @@ class WorstCaseStatusCode
     /**
      * @var array
      */
-    protected static $statusCodeSeverityMap = [
+    protected static $statusSeverityMaps = [
         '5*',
         '4*',
         '200',
@@ -26,7 +26,7 @@ class WorstCaseStatusCode
     public function getWorstCaseStatusCode(array $responses): int
     {
         $worstStatusCode = 200;
-        $worstCaseIndex = \count(self::$statusCodeSeverityMap) - 1;
+        $worstCaseIndex = \count(self::$statusSeverityMaps) - 1;
 
         foreach ($responses as $response) {
             /** @var HealthCheckResponse $response */
@@ -44,8 +44,8 @@ class WorstCaseStatusCode
                     break;
             }
 
-            foreach (self::$statusCodeSeverityMap as $index => $indexValue) {
-                if ($index < $worstCaseIndex && ($code === (string)self::$statusCodeSeverityMap[$index])) {
+            foreach (self::$statusSeverityMaps as $index => $indexValue) {
+                if ($index < $worstCaseIndex && ($code === (string)$indexValue)) {
                     $worstCaseIndex = $index;
                     $worstStatusCode = $statusCode;
                     break;
