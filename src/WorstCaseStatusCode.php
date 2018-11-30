@@ -1,8 +1,8 @@
 <?php
 /**
- * {description}
+ * Return a worst case http status from a collection of statuses
  *
- * @author
+ * @author Ian.H <ian@ianh.io>
  */
 
 namespace Giffgaff\ServiceHealthCheck;

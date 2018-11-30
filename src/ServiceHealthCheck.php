@@ -30,7 +30,9 @@ class ServiceHealthCheck
 
         foreach ($this->services as $serviceName => $healthCheck) {
             if (!($healthCheck instanceof HealthCheck)) {
-                throw new InvalidOperationException('Service ' . $serviceName . ' does not have a valid HealthCheck object');
+                throw new InvalidOperationException(
+                    'Service ' . $serviceName . ' does not have a valid HealthCheck object'
+                );
             }
 
             $response = $healthCheck->getServiceStatus();

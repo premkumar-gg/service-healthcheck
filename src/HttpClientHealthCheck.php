@@ -35,16 +35,20 @@ class HttpClientHealthCheck implements HealthCheck
      * Returns the status of a Http service
      *
      * @return HealthCheckResponse
-     * @throws InvalidOperationException
+     * @throws \GuzzleHttp\Exception\GuzzleException
      */
     public function getServiceStatus(): HealthCheckResponse
     {
-        if (!isset($this->client)) {
-            throw new InvalidOperationException("\$client is not set. Use setClient method to set the client before calling getServiceStatus.");
+        if (null === $this->client) {
+            throw new InvalidOperationException(
+                '$client is not set. Use setClient method to set the client before calling getServiceStatus.'
+            );
         }
 
-        if (!isset($this->request)) {
-            throw new InvalidOperationException("\$request is not set. Use setRequest method to set the request before calling getServiceStatus.");
+        if (null === $this->request) {
+            throw new InvalidOperationException(
+                '$request is not set. Use setRequest method to set the request before calling getServiceStatus.'
+            );
         }
 
         try {
@@ -68,12 +72,21 @@ class HttpClientHealthCheck implements HealthCheck
             );
 
             if (null !== $response) {
-                return new HealthCheckResponse($response->getStatusCode(), $response->getBody()->getContents());
+                return new HealthCheckResponse(
+                    $response->getStatusCode(),
+                    $response->getBody()->getContents()
+                );
             }
 
-            return new HealthCheckResponse(500, 'Fatal error checking service: ' . $this->serviceName);
+            return new HealthCheckResponse(
+                500,
+                'Fatal error checking service: ' . $this->serviceName
+            );
         } catch (RequestException $exception) {
-            return new HealthCheckResponse(500, 'Request failed for service: ' . $this->serviceName);
+            return new HealthCheckResponse(
+                500,
+                'Request failed for service: ' . $this->serviceName
+            );
         }
     }
 

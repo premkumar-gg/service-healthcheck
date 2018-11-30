@@ -50,4 +50,12 @@ class HealthCheckResponse
             'data' => $this->data,
         ];
     }
+
+    /**
+     * @return string
+     */
+    public function toJson(): string
+    {
+        return json_encode($this->toArray());
+    }
 }

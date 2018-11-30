@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<ruleset name="HIBP-PHP PHPMD rules"
+<ruleset name="Service HealthCheck PHPMD rules"
          xmlns="http://pmd.sf.net/ruleset/1.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://pmd.sf.net/ruleset/1.0.0
@@ -13,6 +13,7 @@
     <!-- Redefine ShortVariable rules -->
     <rule ref="rulesets/naming.xml">
         <exclude name="ShortVariable"/>
+        <exclude name="LongVariable"/>
     </rule>
     <rule ref="rulesets/naming.xml/ShortVariable"
           since="0.2"
@@ -23,6 +24,21 @@
         <properties>
             <property name="minimum" value="3" />
             <property name="exceptions" value="id" />
+        </properties>
+    </rule>
+
+    <!-- Redefine LongVariable rules -->
+    <rule name="LongVariable"
+          since="0.2"
+          message="Avoid excessively long variable names like {0}. Keep variable name length under {1}."
+          class="PHPMD\Rule\Naming\LongVariable"
+          externalInfoUrl="https://phpmd.org/rules/naming.html#longvariable">
+        <description>
+            Detects when a field, formal or local variable is declared with a long name.
+        </description>
+        <priority>3</priority>
+        <properties>
+            <property name="maximum" description="The variable length reporting threshold" value="25"/>
         </properties>
     </rule>
 

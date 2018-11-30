@@ -30,6 +30,7 @@ class ServiceHealthCheckTest extends TestCase
         $mock->shouldReceive('setClient')->once()->andReturn();
         $mock->shouldReceive('setRequest')->once()->andReturn();
         $mock->setClient(new Client());
+
         return $mock;
     }
 
@@ -53,7 +54,6 @@ class ServiceHealthCheckTest extends TestCase
         $this->services = [
             'service1' => $service1Mock,
             'service2' => $service2Mock,
-
         ];
 
         $this->healthCheck = new ServiceHealthCheck($this->services);
@@ -75,7 +75,7 @@ class ServiceHealthCheckTest extends TestCase
         $response = $this->healthCheck->getServiceStatuses();
 
         $expectedBody = '{"service1":{"status":200,"data":"positive response"},'
-                        . '"service2":{"status":403,"data":"negative response"}}';
+            . '"service2":{"status":403,"data":"negative response"}}';
 
         $this->assertEquals($expectedBody, $response->getBody()->getContents());
     }
@@ -88,8 +88,8 @@ class ServiceHealthCheckTest extends TestCase
         $services = [
             'service1' => 'invalid-service-instance--should-be-instanceof-HealthCheck-interface'
         ];
-        $healthCheck = new ServiceHealthCheck($services);
 
-        $response = $healthCheck->getServiceStatuses();
+        (new ServiceHealthCheck($services))
+            ->getServiceStatuses();
     }
 }
