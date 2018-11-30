@@ -1,6 +1,6 @@
 <?php
 /**
- * Redis HealthCheck client
+ * Memcached HealthCheck client
  *
  * @author Ian.H <ian@ianh.io>
  */
@@ -8,17 +8,17 @@
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
-use Predis\Client;
+use GuzzleHttp\Psr7\Response;
+use Memcached;
 
-class RedisHealthCheck implements HealthCheck
+class MemcachedHealthCheck implements HealthCheck
 {
+    /** @var Memcached */
+    protected $client;
     /**
      * @var string
      */
     protected $serviceName;
-
-    /** @var Client */
-    protected $client;
 
     public function __construct(string $serviceName)
     {
@@ -28,7 +28,7 @@ class RedisHealthCheck implements HealthCheck
     /**
      * Returns the status of a service
      *
-     * @return HealthCheckResponse
+     * @return Response
      */
     public function getServiceStatus(): HealthCheckResponse
     {
@@ -38,6 +38,7 @@ class RedisHealthCheck implements HealthCheck
             );
         }
 
+        /** @var Memcached $client */
         $this->client->set('test-message', 'YES');
         $value = $this->client->get('test-message');
 
@@ -54,10 +55,7 @@ class RedisHealthCheck implements HealthCheck
         );
     }
 
-    /**
-     * @param Client $client
-     */
-    public function setClient(Client $client): void
+    public function setClient(Memcached $client): void
     {
         $this->client = $client;
     }
