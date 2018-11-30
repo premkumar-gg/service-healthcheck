@@ -1,0 +1,38 @@
+version: 2
+jobs:
+  build:
+    working_directory: /var/www/html
+    docker:
+      - image: 2up/php71-fpm:1.0.3
+    steps:
+      - run:
+          name: Install system packages
+          command: apt-get update -yqq && apt-get install git -yqq && apt-get install zip
+      - run:
+          name: Install PHP unit
+          command: curl --location --output /usr/local/bin/phpunit https://phar.phpunit.de/phpunit.phar && chmod +x /usr/local/bin/phpunit
+      - checkout
+      - run:
+          name: Install Composer
+          command: |
+            php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
+            php -r "if (hash_file('SHA384', 'composer-setup.php') === trim(file_get_contents('https://composer.github.io/installer.sig'))) { echo 'Installer verified'; } else { echo 'Installer invalid'; unlink('composer-setup.php'); } echo PHP_EOL;"
+            php composer-setup.php
+            php -r "unlink('composer-setup.php');"
+      - run:
+          name: Display PHP information
+          command: |
+            php -v
+            php composer.phar --version
+      - run:
+          name: Install project dependencies
+          command: php composer.phar install
+      - run:
+          name: Run CS tests
+          command: vendor/bin/phpcs --error-severity=1 --warning-severity=8 --extensions=php
+      - run:
+          name: Run MD tests
+          command: vendor/phpmd/phpmd/src/bin/phpmd src/ text _phpmd/rules.xml
+      - run:
+          name: Run Unit tests
+          command: vendor/bin/phpunit --configuration phpunit.xml --colors=never --coverage-text
