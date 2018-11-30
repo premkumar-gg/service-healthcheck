@@ -26,6 +26,21 @@
         </properties>
     </rule>
 
+    <!-- Redefine LongVariable rules -->
+    <rule ref="rulesets/naming.xml">
+        <exclude name="LongVariable"/>
+    </rule>
+    <rule ref="rulesets/naming.xml/LongVariable"
+          since="0.2"
+          message="Avoid variables with short names like {0}. Configured minimum length is {1}."
+          class="PHPMD\Rule\Naming\LongVariable"
+          externalInfoUrl="http://phpmd.org/rules/naming.html#longvariable">
+        <priority>3</priority>
+        <properties>
+            <property name="maximum" value="25" />
+        </properties>
+    </rule>
+
     <!-- Import standard rulesets -->
     <rule ref="rulesets/cleancode.xml"/>
     <rule ref="rulesets/codesize.xml"/>
