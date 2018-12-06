@@ -5,7 +5,9 @@
  * @author Ian H. <ian@ianh.io>
  */
 
-namespace Giffgaff\ServiceHealthCheck;
+namespace Giffgaff\ServiceHealthCheck\Interfaces;
+
+use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 
 interface HealthCheck
 {

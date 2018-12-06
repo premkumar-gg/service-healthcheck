@@ -2,6 +2,7 @@
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;

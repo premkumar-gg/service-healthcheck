@@ -6,9 +6,9 @@
 namespace Tests;
 
 use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\HealthCheck;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Handler\MockHandler;
