@@ -1,4 +1,8 @@
 <?php
+/**
+ * Health check client for HTTP requests
+ */
+
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
@@ -8,28 +12,27 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 
 /**
- * Health check for a http client
+ * Class HttpClientHealthCheck
+ *
+ * Health check for an HTTP client
+ *
+ * @package Giffgaff\ServiceHealthCheck
  */
 class HttpClientHealthCheck implements HealthCheck
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    /** @var Client */
+    protected $client;
+    /** @var Request */
+    protected $request;
+    /** @var string  */
+    protected $serviceName;
+    /** @var bool */
+    protected $debugMode = false;
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var string
-     */
-    private $serviceName;
-
-    public function __construct(string $serviceName)
+    public function __construct(string $serviceName, bool $debugMode = false)
     {
         $this->serviceName = $serviceName;
+        $this->debugMode = $debugMode;
     }
 
     /**
@@ -53,16 +56,6 @@ class HttpClientHealthCheck implements HealthCheck
         }
 
         try {
-            $requestOptions = [];
-
-            if (!empty($this->request->getHeaders())) {
-                $requestOptions['headers'] = $this->request->getHeaders();
-            }
-
-            if (!empty($this->request->getBody())) {
-                $requestOptions['body'] = $this->request->getHeaders();
-            }
-
             $response = $this->client->request(
                 $this->request->getMethod(),
                 $this->request->getUri(),
@@ -81,12 +74,14 @@ class HttpClientHealthCheck implements HealthCheck
 
             return new HealthCheckResponse(
                 500,
-                'Fatal error checking service: ' . $this->serviceName
+                'Fatal error checking service: ' . $this->serviceName,
+                $this->debugMode
             );
         } catch (RequestException $exception) {
             return new HealthCheckResponse(
                 500,
-                'Request failed for service: ' . $this->serviceName
+                'Request failed for service: ' . $this->serviceName,
+                $this->debugMode
             );
         }
     }

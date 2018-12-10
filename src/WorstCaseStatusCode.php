@@ -7,11 +7,14 @@
 
 namespace Giffgaff\ServiceHealthCheck;
 
+/**
+ * Class WorstCaseStatusCode
+ *
+ * @package Giffgaff\ServiceHealthCheck
+ */
 class WorstCaseStatusCode
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected static $statusSeverityMaps = [
         '5*',
         '4*',

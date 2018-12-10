@@ -12,18 +12,32 @@ use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
 use GuzzleHttp\Psr7\Response;
 use Memcached;
 
+/**
+ * Class MemcachedHealthCheck
+ *
+ * Memcached health check client
+ *
+ * @package Giffgaff\ServiceHealthCheck
+ */
 class MemcachedHealthCheck implements HealthCheck
 {
     /** @var Memcached */
     protected $client;
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $serviceName;
+    /** @var bool */
+    protected $debugMode = false;
 
-    public function __construct(string $serviceName)
+    /**
+     * MemcachedHealthCheck constructor.
+     *
+     * @param string $serviceName
+     * @param bool $debugMode
+     */
+    public function __construct(string $serviceName, bool $debugMode = false)
     {
         $this->serviceName = $serviceName;
+        $this->debugMode = $debugMode;
     }
 
     /**
@@ -46,16 +60,21 @@ class MemcachedHealthCheck implements HealthCheck
         if ('YES' === $value) {
             return new HealthCheckResponse(
                 200,
-                'Message successfully stored and retrieved for: ' . $this->serviceName
+                'Message successfully stored and retrieved for: ' . $this->serviceName,
+                $this->debugMode
             );
         }
 
         return new HealthCheckResponse(
             500,
-            'Failed to store and retrieve message for: ' . $this->serviceName
+            'Failed to store and retrieve message for: ' . $this->serviceName,
+            $this->debugMode
         );
     }
 
+    /**
+     * @param Memcached $client
+     */
     public function setClient(Memcached $client): void
     {
         $this->client = $client;

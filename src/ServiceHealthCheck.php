@@ -6,13 +6,21 @@ use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
 use GuzzleHttp\Psr7\Response;
 
+/**
+ * Class ServiceHealthCheck
+ *
+ * @package Giffgaff\ServiceHealthCheck
+ */
 class ServiceHealthCheck
 {
-    /**
-     * @var array
-     */
+    /** @var array */
     protected $services;
 
+    /**
+     * ServiceHealthCheck constructor.
+     *
+     * @param array $services
+     */
     public function __construct(array $services)
     {
         $this->services = $services;

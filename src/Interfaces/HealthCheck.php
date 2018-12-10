@@ -11,7 +11,7 @@ use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 
 interface HealthCheck
 {
-    public function __construct(string $serviceName);
+    public function __construct(string $serviceName, bool $debugMode = false);
 
     /**
      * Returns the status of a service
