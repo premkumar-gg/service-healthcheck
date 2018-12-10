@@ -7,6 +7,8 @@
 
 namespace Giffgaff\ServiceHealthCheck;
 
+use GuzzleHttp\Psr7\Request;
+
 class HealthCheckResponse
 {
     /** @var string */
@@ -19,6 +21,10 @@ class HealthCheckResponse
     protected $data;
     /** @var bool */
     protected $debugMode = false;
+    /** @var Request */
+    protected $request;
+    /** @var string */
+    protected $logFile;
 
     /**
      * HealthCheckResponse constructor.
@@ -26,12 +32,18 @@ class HealthCheckResponse
      * @param int $statusCode
      * @param string $data
      * @param bool $debugMode
+     * @param Request|null $request
      */
-    public function __construct(int $statusCode, string $data, bool $debugMode = false)
-    {
+    public function __construct(
+        int $statusCode,
+        string $data,
+        bool $debugMode = false,
+        Request $request = null
+    ) {
         $this->statusCode = $statusCode;
         $this->data = $data;
         $this->debugMode = $debugMode;
+        $this->request = $request;
     }
 
     /**
@@ -67,13 +79,5 @@ class HealthCheckResponse
             'status' => $this->statusCode,
             'data' => $data,
         ];
-    }
-
-    /**
-     * @return string
-     */
-    public function toJson(): string
-    {
-        return json_encode($this->toArray());
     }
 }

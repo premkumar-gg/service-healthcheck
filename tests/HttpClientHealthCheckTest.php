@@ -43,19 +43,27 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestMadeWithValidUriOnlyReturnsAHealthCheckResponse(): void
+    public function whenRequestMadeWithValidUriOnlyReturnsAHealthCheckResponseWithHttpRequest(): void
     {
         // setup
         $mock = new MockHandler([
             new Response(200, [], 'test response'),
         ]);
         $client = new Client(['handler' => $mock]);
-        $expectedHealthCheckResponse = new HealthCheckResponse(200, 'test response');
+
+        $request = new Request('GET', 'http://service');
+
+        $expectedHealthCheckResponse = new HealthCheckResponse(
+            200,
+            'test response',
+            false,
+            $request
+        );
 
         // when
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
-        $httpClientHealthCheck->setRequest(new Request('GET', 'http://service'));
+        $httpClientHealthCheck->setRequest($request);
 
         // then
         $this->assertEquals($expectedHealthCheckResponse, $httpClientHealthCheck->getServiceStatus());
@@ -112,10 +120,12 @@ class HttpClientHealthCheckTest extends TestCase
     {
         // setup
         $requestBody = 'test-request-body';
+        $request = new Request('GET', 'http://service', [], $requestBody);
+
         $mock = new MockHandler([
             new RequestException(
                 'Cannot connect to server',
-                new Request('GET', 'http://service')
+                $request
             ),
         ]);
         $client = new Client(['handler' => $mock]);
@@ -123,11 +133,16 @@ class HttpClientHealthCheckTest extends TestCase
         // when
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
-        $httpClientHealthCheck->setRequest(new Request('GET', 'http://service', [], $requestBody));
+        $httpClientHealthCheck->setRequest($request);
         $response = $httpClientHealthCheck->getServiceStatus();
 
         // then
-        $expectedResponse = new HealthCheckResponse(500, 'Request failed for service: sampleService');
+        $expectedResponse = new HealthCheckResponse(
+            500,
+            'Request failed for service: sampleService',
+            false,
+            $request
+        );
         $this->assertEquals($expectedResponse, $response);
     }
 }

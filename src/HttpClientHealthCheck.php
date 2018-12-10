@@ -69,20 +69,23 @@ class HttpClientHealthCheck implements HealthCheck
                 return new HealthCheckResponse(
                     $response->getStatusCode(),
                     $response->getBody()->getContents(),
-                    $this->debugMode
+                    $this->debugMode,
+                    $this->request
                 );
             }
 
             return new HealthCheckResponse(
                 500,
                 'Fatal error checking service: ' . $this->serviceName,
-                $this->debugMode
+                $this->debugMode,
+                $this->request
             );
         } catch (RequestException $exception) {
             return new HealthCheckResponse(
                 500,
                 'Request failed for service: ' . $this->serviceName,
-                $this->debugMode
+                $this->debugMode,
+                $this->request
             );
         }
     }
