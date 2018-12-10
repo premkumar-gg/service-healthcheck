@@ -68,7 +68,8 @@ class HttpClientHealthCheck implements HealthCheck
             if (null !== $response) {
                 return new HealthCheckResponse(
                     $response->getStatusCode(),
-                    $response->getBody()->getContents()
+                    $response->getBody()->getContents(),
+                    $this->debugMode
                 );
             }
 
