@@ -5,7 +5,7 @@
 
 namespace Tests;
 
-use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;

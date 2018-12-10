@@ -7,7 +7,7 @@
 
 namespace Giffgaff\ServiceHealthCheck;
 
-use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
 use GuzzleHttp\Psr7\Response;
 use Memcached;
