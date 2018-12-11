@@ -11,6 +11,7 @@ use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Psr7\Response;
 use Memcached;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class MemcachedHealthCheck
@@ -78,5 +79,10 @@ class MemcachedHealthCheck implements HealthCheckInterface
     public function setClient(Memcached $client): void
     {
         $this->client = $client;
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        // TODO: Implement setLogger() method.
     }
 }

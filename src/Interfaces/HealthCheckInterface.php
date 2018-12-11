@@ -8,6 +8,7 @@
 namespace Giffgaff\ServiceHealthCheck\Interfaces;
 
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
+use Psr\Log\LoggerInterface;
 
 interface HealthCheckInterface
 {
@@ -19,4 +20,6 @@ interface HealthCheckInterface
      * @return HealthCheckResponse
      */
     public function getServiceStatus(): HealthCheckResponse;
+
+    public function setLogger(LoggerInterface $logger): void;
 }

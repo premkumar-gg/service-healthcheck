@@ -5,6 +5,7 @@ namespace Giffgaff\ServiceHealthCheck;
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Psr7\Response;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ServiceHealthCheck
@@ -15,15 +16,20 @@ class ServiceHealthCheck
 {
     /** @var array */
     protected $services;
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
 
     /**
      * ServiceHealthCheck constructor.
      *
      * @param array $services
      */
-    public function __construct(array $services)
+    public function __construct(array $services, LoggerInterface $logger = null)
     {
         $this->services = $services;
+        $this->logger = $logger;
     }
 
     /**
@@ -41,6 +47,10 @@ class ServiceHealthCheck
                 throw new InvalidOperationException(
                     'Service ' . $serviceName . ' does not have a valid HealthCheckInterface object'
                 );
+            }
+
+            if ($this->logger !== null) {
+                $healthCheck->setLogger($this->logger);
             }
 
             $response = $healthCheck->getServiceStatus();

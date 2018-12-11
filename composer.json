@@ -1,6 +1,6 @@
 {
   "name": "giffgaff/service-healthcheck",
-  "version": "2.0.7",
+  "version": "2.0.8",
   "description": "Service health checker.",
   "keywords": [
     "service",

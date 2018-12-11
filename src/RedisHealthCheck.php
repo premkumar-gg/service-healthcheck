@@ -10,6 +10,7 @@ namespace Giffgaff\ServiceHealthCheck;
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Predis\Client;
+use Psr\Log\LoggerInterface;
 
 class RedisHealthCheck implements HealthCheckInterface
 {
@@ -69,5 +70,10 @@ class RedisHealthCheck implements HealthCheckInterface
     public function setClient(Client $client): void
     {
         $this->client = $client;
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        // TODO: Implement setLogger() method.
     }
 }
