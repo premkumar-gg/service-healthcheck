@@ -15,6 +15,7 @@ use GuzzleHttp\Handler\MockHandler;
 use GuzzleHttp\Psr7\Request;
 use GuzzleHttp\Psr7\Response;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class HttpClientHealthCheckTest extends TestCase
 {
@@ -65,6 +66,10 @@ class HttpClientHealthCheckTest extends TestCase
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest($request);
 
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->twice();
+        $httpClientHealthCheck->setLogger($mockedLogger);
+
         // then
         $this->assertEquals($expectedHealthCheckResponse, $httpClientHealthCheck->getServiceStatus());
     }
@@ -86,6 +91,11 @@ class HttpClientHealthCheckTest extends TestCase
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest(new Request('GET', 'http://service', $requestHeaders));
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->twice();
+        $httpClientHealthCheck->setLogger($mockedLogger);
+
         $httpClientHealthCheck->getServiceStatus();
 
         // then
@@ -108,6 +118,11 @@ class HttpClientHealthCheckTest extends TestCase
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest(new Request('GET', 'http://service', [], $requestBody));
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->twice();
+        $httpClientHealthCheck->setLogger($mockedLogger);
+
         $httpClientHealthCheck->getServiceStatus();
 
         // then
@@ -116,7 +131,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestFailsFatally500StatusIsReceived(): void
+    public function whenRequestFailsFatallyResponseCodeOfServiceIsCascaded(): void
     {
         // setup
         $requestBody = 'test-request-body';
@@ -125,7 +140,8 @@ class HttpClientHealthCheckTest extends TestCase
         $mock = new MockHandler([
             new RequestException(
                 'Cannot connect to server',
-                $request
+                $request,
+                new Response(404)
             ),
         ]);
         $client = new Client(['handler' => $mock]);
@@ -134,11 +150,17 @@ class HttpClientHealthCheckTest extends TestCase
         $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest($request);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->once();
+        $mockedLogger->shouldReceive('error')->once();
+        $httpClientHealthCheck->setLogger($mockedLogger);
+
         $response = $httpClientHealthCheck->getServiceStatus();
 
         // then
         $expectedResponse = new HealthCheckResponse(
-            500,
+            404,
             'Request failed for service: sampleService',
             false,
             $request

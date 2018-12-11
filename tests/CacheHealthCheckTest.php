@@ -11,6 +11,7 @@ use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 use Giffgaff\ServiceHealthCheck\Interfaces\CacheInterface;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class CacheHealthCheckTest extends TestCase
 {
@@ -30,8 +31,11 @@ class CacheHealthCheckTest extends TestCase
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
         $mockedCache->shouldReceive('load')->once()->andReturn('YES');
         $mockedCache->shouldReceive('remove')->once()->andReturn('YES');
-
         $cacheHealthCheck->setCache($mockedCache);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->twice();
+        $cacheHealthCheck->setLogger($mockedLogger);
 
         $response = $cacheHealthCheck->getServiceStatus();
         $expectedResponse = new HealthCheckResponse(
@@ -51,8 +55,11 @@ class CacheHealthCheckTest extends TestCase
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
         $mockedCache->shouldReceive('load')->once()->andReturn('SOMETHINGELSE');
         $mockedCache->shouldReceive('remove')->once()->andReturn('YES');
-
         $cacheHealthCheck->setCache($mockedCache);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->twice();
+        $cacheHealthCheck->setLogger($mockedLogger);
 
         $response = $cacheHealthCheck->getServiceStatus();
         $expectedResponse = new HealthCheckResponse(
@@ -72,8 +79,12 @@ class CacheHealthCheckTest extends TestCase
         $mockedCache->shouldReceive('save')->once()->andThrows(new \Exception("Cannot save"));
         $mockedCache->shouldReceive('load')->once()->andReturn('SOMETHINGELSE');
         $mockedCache->shouldReceive('remove')->once()->andReturn('YES');
-
         $cacheHealthCheck->setCache($mockedCache);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->once();
+        $mockedLogger->shouldReceive('error')->once();
+        $cacheHealthCheck->setLogger($mockedLogger);
 
         $response = $cacheHealthCheck->getServiceStatus();
         $expectedResponse = new HealthCheckResponse(
@@ -93,8 +104,12 @@ class CacheHealthCheckTest extends TestCase
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
         $mockedCache->shouldReceive('load')->once()->andThrows(new \Exception("Cannot save"));
         $mockedCache->shouldReceive('remove')->once()->andReturn('YES');
-
         $cacheHealthCheck->setCache($mockedCache);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->once();
+        $mockedLogger->shouldReceive('error')->once();
+        $cacheHealthCheck->setLogger($mockedLogger);
 
         $response = $cacheHealthCheck->getServiceStatus();
         $expectedResponse = new HealthCheckResponse(
@@ -114,8 +129,12 @@ class CacheHealthCheckTest extends TestCase
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
         $mockedCache->shouldReceive('load')->once()->andReturn('YES');
         $mockedCache->shouldReceive('remove')->once()->andThrows(new \Exception("Cannot save"));
-
         $cacheHealthCheck->setCache($mockedCache);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->once();
+        $mockedLogger->shouldReceive('error')->once();
+        $cacheHealthCheck->setLogger($mockedLogger);
 
         $response = $cacheHealthCheck->getServiceStatus();
         $expectedResponse = new HealthCheckResponse(
