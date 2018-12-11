@@ -11,7 +11,7 @@ namespace Tests;
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\RedisHealthCheckInterface;
+use Giffgaff\ServiceHealthCheck\RedisHealthCheck;
 use PHPUnit\Framework\TestCase;
 use Predis\Client as RedisClient;
 
@@ -22,7 +22,7 @@ class RedisHealthCheckTest extends TestCase
     {
         $this->assertContains(
             HealthCheckInterface::class,
-            class_implements(new RedisHealthCheckInterface('sample-service'))
+            class_implements(new RedisHealthCheck('sample-service'))
         );
     }
 
@@ -30,7 +30,7 @@ class RedisHealthCheckTest extends TestCase
     public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
-        $redisClient = new RedisHealthCheckInterface('sample-service');
+        $redisClient = new RedisHealthCheck('sample-service');
         $redisClient->getServiceStatus();
     }
 
@@ -41,7 +41,7 @@ class RedisHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnTrue();
         $mock->shouldReceive('get')->once()->andReturn('YES');
 
-        $redis = new RedisHealthCheckInterface('sample-service');
+        $redis = new RedisHealthCheck('sample-service');
         $redis->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(
@@ -61,7 +61,7 @@ class RedisHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnFalse();
         $mock->shouldReceive('get')->once()->andReturn('NO');
 
-        $redis = new RedisHealthCheckInterface('sample-service');
+        $redis = new RedisHealthCheck('sample-service');
         $redis->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(

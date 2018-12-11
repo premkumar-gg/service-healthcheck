@@ -10,7 +10,7 @@ namespace Tests;
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\MemcachedHealthCheckInterface;
+use Giffgaff\ServiceHealthCheck\MemcachedHealthCheck;
 use Memcached;
 use PHPUnit\Framework\TestCase;
 
@@ -21,7 +21,7 @@ class MemcachedHealthCheckTest extends TestCase
     {
         $this->assertContains(
             HealthCheckInterface::class,
-            class_implements(new MemcachedHealthCheckInterface('sample-service'))
+            class_implements(new MemcachedHealthCheck('sample-service'))
         );
     }
 
@@ -29,7 +29,7 @@ class MemcachedHealthCheckTest extends TestCase
     public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
-        $redisClient = new MemcachedHealthCheckInterface('sample-service');
+        $redisClient = new MemcachedHealthCheck('sample-service');
         $redisClient->getServiceStatus();
     }
 
@@ -40,7 +40,7 @@ class MemcachedHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturn();
         $mock->shouldReceive('get')->once()->andReturn('YES');
 
-        $memcached = new MemcachedHealthCheckInterface('sample-service');
+        $memcached = new MemcachedHealthCheck('sample-service');
         $memcached->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(
@@ -60,7 +60,7 @@ class MemcachedHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnFalse();
         $mock->shouldReceive('get')->once()->andReturn('NO');
 
-        $memcached = new MemcachedHealthCheckInterface('sample-service');
+        $memcached = new MemcachedHealthCheck('sample-service');
         $memcached->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(

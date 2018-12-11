@@ -1,6 +1,6 @@
 <?php
 /**
- * CacheInterface interface required by CacheHealthCheckInterface
+ * CacheInterface interface required by CacheHealthCheck
  */
 
 namespace Giffgaff\ServiceHealthCheck\Interfaces;

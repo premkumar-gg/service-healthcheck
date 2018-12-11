@@ -1,13 +1,13 @@
 <?php
 /**
- * Tests for HttpClientHealthCheckInterface
+ * Tests for HttpClientHealthCheck
  */
 
 namespace Tests;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\HttpClientHealthCheckInterface;
+use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Client;
 use GuzzleHttp\Exception\RequestException;
@@ -21,7 +21,7 @@ class HttpClientHealthCheckTest extends TestCase
     /** @test */
     public function implementsHealthCheck(): void
     {
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $this->assertContains(HealthCheckInterface::class, class_implements($httpClientHealthCheck));
     }
 
@@ -29,7 +29,7 @@ class HttpClientHealthCheckTest extends TestCase
     public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->getServiceStatus();
     }
 
@@ -37,7 +37,7 @@ class HttpClientHealthCheckTest extends TestCase
     public function whenRequestNotSetThrowsException()
     {
         $this->expectException(InvalidOperationException::class);
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient(new Client());
         $httpClientHealthCheck->getServiceStatus();
     }
@@ -61,7 +61,7 @@ class HttpClientHealthCheckTest extends TestCase
         );
 
         // when
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest($request);
 
@@ -83,7 +83,7 @@ class HttpClientHealthCheckTest extends TestCase
         $client = new Client(['handler' => $mock]);
 
         // when
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest(new Request('GET', 'http://service', $requestHeaders));
         $httpClientHealthCheck->getServiceStatus();
@@ -105,7 +105,7 @@ class HttpClientHealthCheckTest extends TestCase
         $client = new Client(['handler' => $mock]);
 
         // when
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest(new Request('GET', 'http://service', [], $requestBody));
         $httpClientHealthCheck->getServiceStatus();
@@ -131,7 +131,7 @@ class HttpClientHealthCheckTest extends TestCase
         $client = new Client(['handler' => $mock]);
 
         // when
-        $httpClientHealthCheck = new HttpClientHealthCheckInterface('sampleService');
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
         $httpClientHealthCheck->setClient($client);
         $httpClientHealthCheck->setRequest($request);
         $response = $httpClientHealthCheck->getServiceStatus();

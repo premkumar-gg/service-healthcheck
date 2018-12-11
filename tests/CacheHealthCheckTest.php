@@ -1,12 +1,12 @@
 <?php
 /**
- * Tests for CacheHealthCheckInterface
+ * Tests for CacheHealthCheck
  */
 
 namespace Tests;
 
 
-use Giffgaff\ServiceHealthCheck\CacheHealthCheckInterface;
+use Giffgaff\ServiceHealthCheck\CacheHealthCheck;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 use Giffgaff\ServiceHealthCheck\Interfaces\CacheInterface;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
@@ -17,14 +17,14 @@ class CacheHealthCheckTest extends TestCase
     /** @test */
     public function implementsHealthCheck(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
         $this->assertContains(HealthCheckInterface::class, class_implements($cacheHealthCheck));
     }
 
     /** @test */
     public function responds200WhenCanReadAndWriteIntoCache(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
 
         $mockedCache = \Mockery::mock(CacheInterface::class);
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
@@ -45,7 +45,7 @@ class CacheHealthCheckTest extends TestCase
     /** @test */
     public function responds500WhenReadValueIsNotTheSameAsWritten(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
 
         $mockedCache = \Mockery::mock(CacheInterface::class);
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
@@ -66,7 +66,7 @@ class CacheHealthCheckTest extends TestCase
     /** @test */
     public function responds500WhenSaveFails(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
 
         $mockedCache = \Mockery::mock(CacheInterface::class);
         $mockedCache->shouldReceive('save')->once()->andThrows(new \Exception("Cannot save"));
@@ -87,7 +87,7 @@ class CacheHealthCheckTest extends TestCase
     /** @test */
     public function responds500WhenLoadFails(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
 
         $mockedCache = \Mockery::mock(CacheInterface::class);
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');
@@ -108,7 +108,7 @@ class CacheHealthCheckTest extends TestCase
     /** @test */
     public function responds500WhenRemoveFails(): void
     {
-        $cacheHealthCheck = new CacheHealthCheckInterface('sampleService');
+        $cacheHealthCheck = new CacheHealthCheck('sampleService');
 
         $mockedCache = \Mockery::mock(CacheInterface::class);
         $mockedCache->shouldReceive('save')->once()->andReturn('YES');

@@ -12,13 +12,13 @@ use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 
 /**
- * Class HttpClientHealthCheckInterface
+ * Class HttpClientHealthCheck
  *
  * Health check for an HTTP client
  *
  * @package Giffgaff\ServiceHealthCheck
  */
-class HttpClientHealthCheckInterface implements HealthCheckInterface
+class HttpClientHealthCheck implements HealthCheckInterface
 {
     /** @var Client */
     protected $client;

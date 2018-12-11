@@ -9,13 +9,13 @@ use Giffgaff\ServiceHealthCheck\Interfaces\CacheInterface;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 
 /**
- * Class CacheHealthCheckInterface
+ * Class CacheHealthCheck
  *
  * Health check for a cache client
  *
  * @package Giffgaff\ServiceHealthCheck
  */
-class CacheHealthCheckInterface implements HealthCheckInterface
+class CacheHealthCheck implements HealthCheckInterface
 {
     /** @var string */
     protected $serviceName;
@@ -25,7 +25,7 @@ class CacheHealthCheckInterface implements HealthCheckInterface
     protected $debugMode = false;
 
     /**
-     * CacheHealthCheckInterface constructor.
+     * CacheHealthCheck constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode

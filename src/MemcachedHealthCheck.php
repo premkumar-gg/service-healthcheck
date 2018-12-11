@@ -13,13 +13,13 @@ use GuzzleHttp\Psr7\Response;
 use Memcached;
 
 /**
- * Class MemcachedHealthCheckInterface
+ * Class MemcachedHealthCheck
  *
  * Memcached health check client
  *
  * @package Giffgaff\ServiceHealthCheck
  */
-class MemcachedHealthCheckInterface implements HealthCheckInterface
+class MemcachedHealthCheck implements HealthCheckInterface
 {
     /** @var Memcached */
     protected $client;
@@ -29,7 +29,7 @@ class MemcachedHealthCheckInterface implements HealthCheckInterface
     protected $debugMode = false;
 
     /**
-     * MemcachedHealthCheckInterface constructor.
+     * MemcachedHealthCheck constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode

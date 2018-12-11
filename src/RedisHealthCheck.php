@@ -11,7 +11,7 @@ use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Predis\Client;
 
-class RedisHealthCheckInterface implements HealthCheckInterface
+class RedisHealthCheck implements HealthCheckInterface
 {
     /** @var string */
     protected $serviceName;
@@ -21,7 +21,7 @@ class RedisHealthCheckInterface implements HealthCheckInterface
     protected $debugMode = false;
 
     /**
-     * RedisHealthCheckInterface constructor.
+     * RedisHealthCheck constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode
