@@ -9,7 +9,7 @@ namespace Giffgaff\ServiceHealthCheck\Interfaces;
 
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 
-interface HealthCheck
+interface HealthCheckInterface
 {
     public function __construct(string $serviceName, bool $debugMode);
 

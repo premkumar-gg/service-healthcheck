@@ -8,9 +8,9 @@
 namespace Tests;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\MemcachedHealthCheck;
+use Giffgaff\ServiceHealthCheck\MemcachedHealthCheckInterface;
 use Memcached;
 use PHPUnit\Framework\TestCase;
 
@@ -20,8 +20,8 @@ class MemcachedHealthCheckTest extends TestCase
     public function implementsHealthCheckInterface(): void
     {
         $this->assertContains(
-            HealthCheck::class,
-            class_implements(new MemcachedHealthCheck('sample-service'))
+            HealthCheckInterface::class,
+            class_implements(new MemcachedHealthCheckInterface('sample-service'))
         );
     }
 
@@ -29,7 +29,7 @@ class MemcachedHealthCheckTest extends TestCase
     public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
-        $redisClient = new MemcachedHealthCheck('sample-service');
+        $redisClient = new MemcachedHealthCheckInterface('sample-service');
         $redisClient->getServiceStatus();
     }
 
@@ -40,7 +40,7 @@ class MemcachedHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturn();
         $mock->shouldReceive('get')->once()->andReturn('YES');
 
-        $memcached = new MemcachedHealthCheck('sample-service');
+        $memcached = new MemcachedHealthCheckInterface('sample-service');
         $memcached->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(
@@ -60,7 +60,7 @@ class MemcachedHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnFalse();
         $mock->shouldReceive('get')->once()->andReturn('NO');
 
-        $memcached = new MemcachedHealthCheck('sample-service');
+        $memcached = new MemcachedHealthCheckInterface('sample-service');
         $memcached->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(

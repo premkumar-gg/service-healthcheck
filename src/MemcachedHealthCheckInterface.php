@@ -1,6 +1,6 @@
 <?php
 /**
- * Memcached HealthCheck client
+ * Memcached HealthCheckInterface client
  *
  * @author Ian.H <ian@ianh.io>
  */
@@ -8,18 +8,18 @@
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Psr7\Response;
 use Memcached;
 
 /**
- * Class MemcachedHealthCheck
+ * Class MemcachedHealthCheckInterface
  *
  * Memcached health check client
  *
  * @package Giffgaff\ServiceHealthCheck
  */
-class MemcachedHealthCheck implements HealthCheck
+class MemcachedHealthCheckInterface implements HealthCheckInterface
 {
     /** @var Memcached */
     protected $client;
@@ -29,7 +29,7 @@ class MemcachedHealthCheck implements HealthCheck
     protected $debugMode = false;
 
     /**
-     * MemcachedHealthCheck constructor.
+     * MemcachedHealthCheckInterface constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode

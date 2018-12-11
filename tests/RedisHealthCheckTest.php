@@ -1,6 +1,6 @@
 <?php
 /**
- * Test suite for Redis HealthCheck client
+ * Test suite for Redis HealthCheckInterface client
  *
  * @author Ian <ian@ianh.io>
  * @since 29/11/2018
@@ -9,9 +9,9 @@
 namespace Tests;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\RedisHealthCheck;
+use Giffgaff\ServiceHealthCheck\RedisHealthCheckInterface;
 use PHPUnit\Framework\TestCase;
 use Predis\Client as RedisClient;
 
@@ -21,8 +21,8 @@ class RedisHealthCheckTest extends TestCase
     public function implementsHealthCheckInterface(): void
     {
         $this->assertContains(
-            HealthCheck::class,
-            class_implements(new RedisHealthCheck('sample-service'))
+            HealthCheckInterface::class,
+            class_implements(new RedisHealthCheckInterface('sample-service'))
         );
     }
 
@@ -30,7 +30,7 @@ class RedisHealthCheckTest extends TestCase
     public function whenClientNotSetThrowsException(): void
     {
         $this->expectException(InvalidOperationException::class);
-        $redisClient = new RedisHealthCheck('sample-service');
+        $redisClient = new RedisHealthCheckInterface('sample-service');
         $redisClient->getServiceStatus();
     }
 
@@ -41,7 +41,7 @@ class RedisHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnTrue();
         $mock->shouldReceive('get')->once()->andReturn('YES');
 
-        $redis = new RedisHealthCheck('sample-service');
+        $redis = new RedisHealthCheckInterface('sample-service');
         $redis->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(
@@ -61,7 +61,7 @@ class RedisHealthCheckTest extends TestCase
         $mock->shouldReceive('set')->once()->andReturnFalse();
         $mock->shouldReceive('get')->once()->andReturn('NO');
 
-        $redis = new RedisHealthCheck('sample-service');
+        $redis = new RedisHealthCheckInterface('sample-service');
         $redis->setClient($mock);
 
         $expectedResponse = new HealthCheckResponse(

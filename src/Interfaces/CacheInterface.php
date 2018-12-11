@@ -1,11 +1,11 @@
 <?php
 /**
- * Cache interface required by CacheHealthCheck
+ * CacheInterface interface required by CacheHealthCheckInterface
  */
 
 namespace Giffgaff\ServiceHealthCheck\Interfaces;
 
-interface Cache
+interface CacheInterface
 {
     public function save($result, $id);
     public function load($id);

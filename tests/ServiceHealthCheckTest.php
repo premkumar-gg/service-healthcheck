@@ -3,7 +3,7 @@ namespace Tests;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
-use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
+use Giffgaff\ServiceHealthCheck\HttpClientHealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\ServiceHealthCheck;
 use GuzzleHttp\Client;
 use GuzzleHttp\Psr7\Request;
@@ -21,11 +21,11 @@ class ServiceHealthCheckTest extends TestCase
     protected $services;
 
     /**
-     * @return HttpClientHealthCheck|\Mockery\MockInterface
+     * @return HttpClientHealthCheckInterface|\Mockery\MockInterface
      */
     protected function getMockedHttpClientHealthCheck()
     {
-        $mock = \Mockery::mock(HttpClientHealthCheck::class);
+        $mock = \Mockery::mock(HttpClientHealthCheckInterface::class);
         $mock->shouldReceive('setClient')->once()->andReturn();
         $mock->shouldReceive('setRequest')->once()->andReturn();
         $mock->setClient(new Client());
@@ -115,7 +115,7 @@ class ServiceHealthCheckTest extends TestCase
         $this->expectException(InvalidOperationException::class);
 
         $services = [
-            'service1' => 'invalid-service-instance--should-be-instanceof-HealthCheck-interface'
+            'service1' => 'invalid-service-instance--should-be-instanceof-HealthCheckInterface-interface'
         ];
 
         (new ServiceHealthCheck($services))

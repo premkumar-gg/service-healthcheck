@@ -3,7 +3,7 @@
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Psr7\Response;
 
 /**
@@ -37,9 +37,9 @@ class ServiceHealthCheck
         $responseData = [];
 
         foreach ($this->services as $serviceName => $healthCheck) {
-            if (!($healthCheck instanceof HealthCheck)) {
+            if (!($healthCheck instanceof HealthCheckInterface)) {
                 throw new InvalidOperationException(
-                    'Service ' . $serviceName . ' does not have a valid HealthCheck object'
+                    'Service ' . $serviceName . ' does not have a valid HealthCheckInterface object'
                 );
             }
 

@@ -5,27 +5,27 @@
 
 namespace Giffgaff\ServiceHealthCheck;
 
-use Giffgaff\ServiceHealthCheck\Interfaces\Cache;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\CacheInterface;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 
 /**
- * Class CacheHealthCheck
+ * Class CacheHealthCheckInterface
  *
  * Health check for a cache client
  *
  * @package Giffgaff\ServiceHealthCheck
  */
-class CacheHealthCheck implements HealthCheck
+class CacheHealthCheckInterface implements HealthCheckInterface
 {
     /** @var string */
     protected $serviceName;
-    /** @var Cache */
+    /** @var CacheInterface */
     protected $cache;
     /** @var bool */
     protected $debugMode = false;
 
     /**
-     * CacheHealthCheck constructor.
+     * CacheHealthCheckInterface constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode
@@ -37,9 +37,9 @@ class CacheHealthCheck implements HealthCheck
     }
 
     /**
-     * @param $cache Cache
+     * @param $cache CacheInterface
      */
-    public function setCache(Cache $cache): void
+    public function setCache(CacheInterface $cache): void
     {
         $this->cache = $cache;
     }

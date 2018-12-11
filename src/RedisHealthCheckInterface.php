@@ -1,6 +1,6 @@
 <?php
 /**
- * Redis HealthCheck client
+ * Redis HealthCheckInterface client
  *
  * @author Ian.H <ian@ianh.io>
  */
@@ -8,10 +8,10 @@
 namespace Giffgaff\ServiceHealthCheck;
 
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Predis\Client;
 
-class RedisHealthCheck implements HealthCheck
+class RedisHealthCheckInterface implements HealthCheckInterface
 {
     /** @var string */
     protected $serviceName;
@@ -21,7 +21,7 @@ class RedisHealthCheck implements HealthCheck
     protected $debugMode = false;
 
     /**
-     * RedisHealthCheck constructor.
+     * RedisHealthCheckInterface constructor.
      *
      * @param string $serviceName
      * @param bool $debugMode
