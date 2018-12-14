@@ -8,6 +8,7 @@ namespace Giffgaff\ServiceHealthCheck;
 use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
 use Psr\Log\LoggerInterface;
@@ -21,7 +22,7 @@ use Psr\Log\LoggerInterface;
  */
 class HttpClientHealthCheck implements HealthCheckInterface
 {
-    /** @var Client */
+    /** @var ClientInterface */
     protected $client;
     /** @var Request */
     protected $request;
@@ -120,9 +121,9 @@ class HttpClientHealthCheck implements HealthCheckInterface
     }
 
     /**
-     * @param Client $client
+     * @param ClientInterface $client
      */
-    public function setClient(Client $client): void
+    public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
     }
