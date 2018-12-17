@@ -102,24 +102,35 @@ class HttpClientHealthCheck implements HealthCheckInterface
                 $this->request
             );
         } catch (RequestException $exception) {
-            $this->logger->error(
-                "(HealthCheck)($transactionId): Request failed for service {$this->serviceName}",
-                [
-                    'log_source' => __FILE__,
-                    'exception_type' => 'RequestException',
-                    'exception' => $exception
-                ]
-            );
-
+            $this->logRequestException($transactionId, $exception);
             $response = $exception->getResponse();
-
-            return new HealthCheckResponse(
-                $response !== null ? $response->getStatusCode() : 500,
-                'Request failed for service: ' . $this->serviceName,
-                $this->debugMode,
-                $this->request
-            );
+            $statusCode = $response !== null ? $response->getStatusCode() : 500;
+            return $this->failService($statusCode);
+        } catch (\Exception $exception) {
+            $this->logRequestException($transactionId, $exception);
+            return $this->failService(500);
         }
+    }
+
+    protected function failService(int $responseCode)
+    {
+        return new HealthCheckResponse(
+            $responseCode,
+            'Request failed for service: ' . $this->serviceName,
+            $this->debugMode,
+            $this->request
+        );
+    }
+
+    protected function logRequestException(string $transactionId, \Exception $exception)
+    {
+        $this->logger->error(
+            "(HealthCheck)($transactionId): Request failed for service {$this->serviceName}",
+            [
+                'log_source' => __FILE__,
+                'exception' => $exception
+            ]
+        );
     }
 
     /**
