@@ -131,7 +131,7 @@ class HttpClientHealthCheckTest extends TestCase
     }
 
     /** @test */
-    public function whenRequestFailsFatallyResponseCodeOfServiceIsCascaded(): void
+    public function whenAServiceFailsResponseCodeOfServiceIsCascaded(): void
     {
         // setup
         $requestBody = 'test-request-body';
@@ -161,6 +161,44 @@ class HttpClientHealthCheckTest extends TestCase
         // then
         $expectedResponse = new HealthCheckResponse(
             404,
+            'Request failed for service: sampleService',
+            false,
+            $request
+        );
+        $this->assertEquals($expectedResponse, $response);
+    }
+
+    /** @test */
+    public function whenRequestFailsFatallyResponseCodeOfServiceIsCascaded(): void
+    {
+        // setup
+        $requestBody = 'test-request-body';
+        $request = new Request('GET', 'http://service', [], $requestBody);
+
+        $mock = new MockHandler([
+            new RequestException(
+                'Cannot connect to server',
+                $request,
+                null
+            ),
+        ]);
+        $client = new Client(['handler' => $mock]);
+
+        // when
+        $httpClientHealthCheck = new HttpClientHealthCheck('sampleService');
+        $httpClientHealthCheck->setClient($client);
+        $httpClientHealthCheck->setRequest($request);
+
+        $mockedLogger = \Mockery::mock(LoggerInterface::class);
+        $mockedLogger->shouldReceive('info')->once();
+        $mockedLogger->shouldReceive('error')->once();
+        $httpClientHealthCheck->setLogger($mockedLogger);
+
+        $response = $httpClientHealthCheck->getServiceStatus();
+
+        // then
+        $expectedResponse = new HealthCheckResponse(
+            500,
             'Request failed for service: sampleService',
             false,
             $request

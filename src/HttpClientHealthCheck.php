@@ -111,8 +111,10 @@ class HttpClientHealthCheck implements HealthCheckInterface
                 ]
             );
 
+            $response = $exception->getResponse();
+
             return new HealthCheckResponse(
-                $exception->getResponse()->getStatusCode(),
+                $response !== null ? $response->getStatusCode() : 500,
                 'Request failed for service: ' . $this->serviceName,
                 $this->debugMode,
                 $this->request
