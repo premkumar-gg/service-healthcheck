@@ -1,6 +1,6 @@
 <?php
 /**
- * Test suite for Redis HealthCheck client
+ * Test suite for Redis HealthCheckInterface client
  *
  * @author Ian <ian@ianh.io>
  * @since 29/11/2018
@@ -8,8 +8,8 @@
 
 namespace Tests;
 
-use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
-use Giffgaff\ServiceHealthCheck\HealthCheck;
+use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Giffgaff\ServiceHealthCheck\HealthCheckResponse;
 use Giffgaff\ServiceHealthCheck\RedisHealthCheck;
 use PHPUnit\Framework\TestCase;
@@ -21,7 +21,7 @@ class RedisHealthCheckTest extends TestCase
     public function implementsHealthCheckInterface(): void
     {
         $this->assertContains(
-            HealthCheck::class,
+            HealthCheckInterface::class,
             class_implements(new RedisHealthCheck('sample-service'))
         );
     }

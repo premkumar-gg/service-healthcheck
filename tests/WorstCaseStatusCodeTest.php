@@ -1,8 +1,8 @@
 <?php
 /**
- * {description}
+ * Status code correlation check
  *
- * @author
+ * @author Ian.H <ian@ianh.io>
  */
 
 namespace Tests;

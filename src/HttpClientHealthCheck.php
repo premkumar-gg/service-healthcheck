@@ -1,34 +1,42 @@
 <?php
+/**
+ * Health check client for HTTP requests
+ */
+
 namespace Giffgaff\ServiceHealthCheck;
 
-use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use GuzzleHttp\Client;
+use GuzzleHttp\ClientInterface;
 use GuzzleHttp\Exception\RequestException;
 use GuzzleHttp\Psr7\Request;
+use Psr\Log\LoggerInterface;
 
 /**
- * Health check for a http client
+ * Class HttpClientHealthCheck
+ *
+ * Health check for an HTTP client
+ *
+ * @package Giffgaff\ServiceHealthCheck
  */
-class HttpClientHealthCheck implements HealthCheck
+class HttpClientHealthCheck implements HealthCheckInterface
 {
-    /**
-     * @var Client
-     */
-    private $client;
+    /** @var ClientInterface */
+    protected $client;
+    /** @var Request */
+    protected $request;
+    /** @var string  */
+    protected $serviceName;
+    /** @var bool */
+    protected $debugMode = false;
+    /** @var LoggerInterface */
+    protected $logger;
 
-    /**
-     * @var Request
-     */
-    private $request;
-
-    /**
-     * @var string
-     */
-    private $serviceName;
-
-    public function __construct(string $serviceName)
+    public function __construct(string $serviceName, bool $debugMode = false)
     {
         $this->serviceName = $serviceName;
+        $this->debugMode = $debugMode;
     }
 
     /**
@@ -52,15 +60,15 @@ class HttpClientHealthCheck implements HealthCheck
         }
 
         try {
-            $requestOptions = [];
+            $transactionId = uniqid();
 
-            if (!empty($this->request->getHeaders())) {
-                $requestOptions['headers'] = $this->request->getHeaders();
-            }
-
-            if (!empty($this->request->getBody())) {
-                $requestOptions['body'] = $this->request->getHeaders();
-            }
+            $this->logger->info(
+                "(HealthCheck)($transactionId): making a http client request for service {$this->serviceName}",
+                [
+                    'end_point' => $this->request->getUri()->__toString(),
+                    'method' => $this->request->getMethod()
+                ]
+            );
 
             $response = $this->client->request(
                 $this->request->getMethod(),
@@ -72,28 +80,63 @@ class HttpClientHealthCheck implements HealthCheck
             );
 
             if (null !== $response) {
+                $this->logger->info(
+                    "(HealthCheck)($transactionId): received a positive http client response for service {$this->serviceName}"
+                );
+
                 return new HealthCheckResponse(
                     $response->getStatusCode(),
-                    $response->getBody()->getContents()
+                    $response->getBody()->getContents(),
+                    $this->debugMode,
+                    $this->request
                 );
             }
 
+            $this->logger->error(
+                "(HealthCheck)($transactionId): received an unexpected null http client response for service {$this->serviceName}"
+            );
             return new HealthCheckResponse(
                 500,
-                'Fatal error checking service: ' . $this->serviceName
+                'Fatal error checking service: ' . $this->serviceName,
+                $this->debugMode,
+                $this->request
             );
         } catch (RequestException $exception) {
-            return new HealthCheckResponse(
-                500,
-                'Request failed for service: ' . $this->serviceName
-            );
+            $this->logRequestException($transactionId, $exception);
+            $response = $exception->getResponse();
+            $statusCode = $response !== null ? $response->getStatusCode() : 500;
+            return $this->failService($statusCode);
+        } catch (\Exception $exception) {
+            $this->logRequestException($transactionId, $exception);
+            return $this->failService(500);
         }
     }
 
+    protected function failService(int $responseCode)
+    {
+        return new HealthCheckResponse(
+            $responseCode,
+            'Request failed for service: ' . $this->serviceName,
+            $this->debugMode,
+            $this->request
+        );
+    }
+
+    protected function logRequestException(string $transactionId, \Exception $exception)
+    {
+        $this->logger->error(
+            "(HealthCheck)($transactionId): Request failed for service {$this->serviceName}",
+            [
+                'log_source' => __FILE__,
+                'exception' => $exception
+            ]
+        );
+    }
+
     /**
-     * @param Client $client
+     * @param ClientInterface $client
      */
-    public function setClient(Client $client): void
+    public function setClient(ClientInterface $client): void
     {
         $this->client = $client;
     }
@@ -104,5 +147,10 @@ class HttpClientHealthCheck implements HealthCheck
     public function setRequest(Request $request): void
     {
         $this->request = $request;
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        $this->logger = $logger;
     }
 }

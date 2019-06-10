@@ -1,5 +1,5 @@
 <?php
-namespace Giffgaff\ServiceHealthCheck\Exception;
+namespace Giffgaff\ServiceHealthCheck\Exceptions;
 
 /**
  * Exception thrown when an intended client is unknown

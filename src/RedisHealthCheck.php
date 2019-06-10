@@ -1,28 +1,36 @@
 <?php
 /**
- * Redis HealthCheck client
+ * Redis HealthCheckInterface client
  *
  * @author Ian.H <ian@ianh.io>
  */
 
 namespace Giffgaff\ServiceHealthCheck;
 
-use Giffgaff\ServiceHealthCheck\Exception\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Exceptions\InvalidOperationException;
+use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Predis\Client;
+use Psr\Log\LoggerInterface;
 
-class RedisHealthCheck implements HealthCheck
+class RedisHealthCheck implements HealthCheckInterface
 {
-    /**
-     * @var string
-     */
+    /** @var string */
     protected $serviceName;
-
     /** @var Client */
     protected $client;
+    /** @var bool */
+    protected $debugMode = false;
 
-    public function __construct(string $serviceName)
+    /**
+     * RedisHealthCheck constructor.
+     *
+     * @param string $serviceName
+     * @param bool $debugMode
+     */
+    public function __construct(string $serviceName, bool $debugMode = false)
     {
         $this->serviceName = $serviceName;
+        $this->debugMode = $debugMode;
     }
 
     /**
@@ -44,13 +52,15 @@ class RedisHealthCheck implements HealthCheck
         if ('YES' === $value) {
             return new HealthCheckResponse(
                 200,
-                'Message successfully stored and retrieved for: ' . $this->serviceName
+                'Message successfully stored and retrieved for: ' . $this->serviceName,
+                $this->debugMode
             );
         }
 
         return new HealthCheckResponse(
             500,
-            'Failed to store and retrieve message for: ' . $this->serviceName
+            'Failed to store and retrieve message for: ' . $this->serviceName,
+            $this->debugMode
         );
     }
 
@@ -60,5 +70,10 @@ class RedisHealthCheck implements HealthCheck
     public function setClient(Client $client): void
     {
         $this->client = $client;
+    }
+
+    public function setLogger(LoggerInterface $logger): void
+    {
+        // TODO: Implement setLogger() method.
     }
 }
