@@ -12,7 +12,7 @@ use Psr\Log\LoggerInterface;
 
 interface HealthCheckInterface
 {
-    public function __construct(string $serviceName, bool $debugMode);
+    public function __construct(string $serviceName);
 
     /**
      * Returns the status of a service

@@ -27,10 +27,9 @@ class RedisHealthCheck implements HealthCheckInterface
      * @param string $serviceName
      * @param bool $debugMode
      */
-    public function __construct(string $serviceName, bool $debugMode = false)
+    public function __construct(string $serviceName)
     {
         $this->serviceName = $serviceName;
-        $this->debugMode = $debugMode;
     }
 
     /**
@@ -75,5 +74,21 @@ class RedisHealthCheck implements HealthCheckInterface
     public function setLogger(LoggerInterface $logger): void
     {
         // TODO: Implement setLogger() method.
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebugMode(): bool
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * @param bool $debugMode
+     */
+    public function setDebugMode(bool $debugMode): void
+    {
+        $this->debugMode = $debugMode;
     }
 }

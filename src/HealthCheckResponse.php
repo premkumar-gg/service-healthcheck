@@ -37,12 +37,10 @@ class HealthCheckResponse
     public function __construct(
         int $statusCode,
         string $data,
-        bool $debugMode = false,
         Request $request = null
     ) {
         $this->statusCode = $statusCode;
         $this->data = $data;
-        $this->debugMode = $debugMode;
         $this->request = $request;
     }
 
@@ -79,5 +77,21 @@ class HealthCheckResponse
             'status' => $this->statusCode,
             'data' => $data,
         ];
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebugMode(): bool
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * @param bool $debugMode
+     */
+    public function setDebugMode(bool $debugMode): void
+    {
+        $this->debugMode = $debugMode;
     }
 }

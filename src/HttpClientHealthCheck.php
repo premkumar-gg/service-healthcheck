@@ -33,10 +33,9 @@ class HttpClientHealthCheck implements HealthCheckInterface
     /** @var LoggerInterface */
     protected $logger;
 
-    public function __construct(string $serviceName, bool $debugMode = false)
+    public function __construct(string $serviceName)
     {
         $this->serviceName = $serviceName;
-        $this->debugMode = $debugMode;
     }
 
     /**
@@ -152,5 +151,21 @@ class HttpClientHealthCheck implements HealthCheckInterface
     public function setLogger(LoggerInterface $logger): void
     {
         $this->logger = $logger;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isDebugMode(): bool
+    {
+        return $this->debugMode;
+    }
+
+    /**
+     * @param bool $debugMode
+     */
+    public function setDebugMode(bool $debugMode): void
+    {
+        $this->debugMode = $debugMode;
     }
 }

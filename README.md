@@ -61,13 +61,12 @@ use Giffgaff\ServiceHealthCheck\HttpClientHealthCheck;
 use Giffgaff\ServiceHealthCheck\ServiceHealthCheck;
 use GuzzleHttp\Psr7\Request;
 
-$debugMode = true;
 $requestOptions = ['verify' => false]; // Add any more HTTP headers, ex: auth
 $method = 'GET';
 $url = 'https://www.google.com';
 $serviceName = 'a-third-party/google';
 
-$httpCheck = new HttpClientHealthCheck($serviceName, $debugMode);
+$httpCheck = new HttpClientHealthCheck($serviceName);
 $httpCheck->setRequest(new Request($method, $url, $requestOptions));
 
 $servicesToCheck = [
@@ -87,7 +86,7 @@ The client uses the Predis\Client interface.
 
 ```php
 use Predis\Client;
-$redisCheck = new RedisHealthCheck($serviceName, $debugMode);
+$redisCheck = new RedisHealthCheck($serviceName);
 
 $redisClient = new Client(/**/);
 $redisCheck.setClient($redisClient);
@@ -104,7 +103,7 @@ The client uses the Memcached interface.
 
 ```php
 use Predis\Client;
-$memcachedCheck = new MemcachedHealthCheck($serviceName, $debugMode);
+$memcachedCheck = new MemcachedHealthCheck($serviceName);
 
 $memcachedClient = new Client(/**/);
 $memcachedCheck.setClient($memcachedClient);
