@@ -15,6 +15,7 @@ an easy-to-use interface.
 ```php
 use Giffgaff\ServiceHealthCheck\Interfaces\HealthCheckInterface;
 use Psr\Log\LoggerInterface;
+use GuzzleHttp\Psr7\Response;
 
 $servicesToCheck = [
     'service1' => <HelatchCheckInterface object1>,
@@ -25,6 +26,32 @@ $servicesToCheck = [
 $logger = <LoggerInterface object>;
 
 $healthCheck = new ServiceHealthCheck($servicesToCheck, $logger);
+
+/*
+@var GuzzleHttp\Psr7\Response
+*/
+$response = $healthCheck->getServiceStatuses();
+```
+
+The response status will be the worst case of the responses from all the
+services provided. The response data will be the responses from each
+individual service.
+
+```
+[
+    status => <worst_case_status_code>
+    data => [
+        "service1" => [
+            status => <status_code_of_service1>
+            data => <response_data_of_service1>
+        ],
+        "service2" => [
+            status => <status_code_of_service2>
+            data => <response_data_of_service2>
+        ],
+        ...
+    ]
+]
 ```
 
 ### Http checks
@@ -47,10 +74,9 @@ $servicesToCheck = [
     $serviceName => $httpCheck
 ];
 
-/*
-@var HealthCheckResponse
-*/
 $healthCheck = new ServiceHealthCheck($servicesToCheck, $logger);
+$healthCheck->getServiceStatuses();
+$response = $healthCheck->getServiceStatuses();
 ```
 
 ### Redis checks
@@ -66,10 +92,8 @@ $redisCheck = new RedisHealthCheck($serviceName, $debugMode);
 $redisClient = new Client(/**/);
 $redisCheck.setClient($redisClient);
 
-/*
-@var HealthCheckResponse
-*/
 $healthCheck = new ServiceHealthCheck(['redis-svc' => $redisCheck], $logger);
+$response = $healthCheck->getServiceStatuses();
 ```
 
 ### Memcached checks
@@ -85,10 +109,8 @@ $memcachedCheck = new MemcachedHealthCheck($serviceName, $debugMode);
 $memcachedClient = new Client(/**/);
 $memcachedCheck.setClient($memcachedClient);
 
-/*
-@var HealthCheckResponse
-*/
 $healthCheck = new ServiceHealthCheck(['memcached-svc' => $memcachedCheck], $logger);
+$response = $healthCheck->getServiceStatuses();
 ```
 
 ## TODO
