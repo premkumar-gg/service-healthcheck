@@ -40,13 +40,13 @@ class ServiceHealthCheckTest extends TestCase
     {
         $service1DebugMock = $this->getMockedHttpClientHealthCheck();
         $service1DebugMock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(200, 'positive response', true)
+            new HealthCheckResponse(200, 'positive response')
         );
         $service1DebugMock->setRequest(new Request('GET', 'http://service1'));
 
         $service2DebugMock = $this->getMockedHttpClientHealthCheck();
         $service2DebugMock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(403, 'negative response', true)
+            new HealthCheckResponse(403, 'negative response')
         );
         $service2DebugMock->setRequest(new Request('GET', 'http://service2'));
 
@@ -59,13 +59,13 @@ class ServiceHealthCheckTest extends TestCase
 
         $service1Mock = $this->getMockedHttpClientHealthCheck();
         $service1Mock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(200, 'positive response', false)
+            new HealthCheckResponse(200, 'positive response')
         );
         $service1Mock->setRequest(new Request('GET', 'http://service1'));
 
         $service2Mock = $this->getMockedHttpClientHealthCheck();
         $service2Mock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(403, 'negative response', false)
+            new HealthCheckResponse(403, 'negative response')
         );
         $service2Mock->setRequest(new Request('GET', 'http://service2'));
 

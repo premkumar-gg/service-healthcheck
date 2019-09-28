@@ -51,15 +51,13 @@ class RedisHealthCheck implements HealthCheckInterface
         if ('YES' === $value) {
             return new HealthCheckResponse(
                 200,
-                'Message successfully stored and retrieved for: ' . $this->serviceName,
-                $this->debugMode
+                'Message successfully stored and retrieved for: ' . $this->serviceName
             );
         }
 
         return new HealthCheckResponse(
             500,
-            'Failed to store and retrieve message for: ' . $this->serviceName,
-            $this->debugMode
+            'Failed to store and retrieve message for: ' . $this->serviceName
         );
     }
 

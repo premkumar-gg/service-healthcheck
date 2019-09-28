@@ -57,7 +57,6 @@ class HttpClientHealthCheckTest extends TestCase
         $expectedHealthCheckResponse = new HealthCheckResponse(
             200,
             'test response',
-            false,
             $request
         );
 
@@ -162,7 +161,6 @@ class HttpClientHealthCheckTest extends TestCase
         $expectedResponse = new HealthCheckResponse(
             404,
             'Request failed for service: sampleService',
-            false,
             $request
         );
         $this->assertEquals($expectedResponse, $response);
@@ -200,7 +198,6 @@ class HttpClientHealthCheckTest extends TestCase
         $expectedResponse = new HealthCheckResponse(
             500,
             'Request failed for service: sampleService',
-            false,
             $request
         );
         $this->assertEquals($expectedResponse, $response);
@@ -234,7 +231,6 @@ class HttpClientHealthCheckTest extends TestCase
         $expectedResponse = new HealthCheckResponse(
             500,
             'Request failed for service: sampleService',
-            false,
             $request
         );
         $this->assertEquals($expectedResponse, $response);

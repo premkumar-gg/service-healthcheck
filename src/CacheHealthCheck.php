@@ -70,8 +70,7 @@ class CacheHealthCheck implements HealthCheckInterface
                 );
                 return new HealthCheckResponse(
                     200,
-                    'Able to write and read some data in ' . $this->serviceName,
-                    $this->debugMode
+                    'Able to write and read some data in ' . $this->serviceName
                 );
             }
 
@@ -83,8 +82,7 @@ class CacheHealthCheck implements HealthCheckInterface
             return new HealthCheckResponse(
                 500,
                 'Something went wrong while writing into ' . $this->serviceName . '. ' .
-                'The value read is not the same as the written.',
-                $this->debugMode
+                'The value read is not the same as the written.'
             );
         } catch (\Exception $e) {
             $this->logger->error(
@@ -98,8 +96,7 @@ class CacheHealthCheck implements HealthCheckInterface
 
             return new HealthCheckResponse(
                 500,
-                'Fatal error while testing ' . $this->serviceName . '.',
-                $this->debugMode
+                'Fatal error while testing ' . $this->serviceName . '.'
             );
         }
     }
