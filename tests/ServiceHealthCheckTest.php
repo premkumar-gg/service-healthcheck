@@ -39,15 +39,15 @@ class ServiceHealthCheckTest extends TestCase
     public function setUp()
     {
         $service1DebugMock = $this->getMockedHttpClientHealthCheck();
-        $service1DebugMock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(200, 'positive response')
-        );
+        $service1HealthCheckResponse = new HealthCheckResponse(200, 'positive response');
+        $service1HealthCheckResponse->setDebugMode(true);
+        $service1DebugMock->shouldReceive('getServiceStatus')->once()->andReturn($service1HealthCheckResponse);
         $service1DebugMock->setRequest(new Request('GET', 'http://service1'));
 
         $service2DebugMock = $this->getMockedHttpClientHealthCheck();
-        $service2DebugMock->shouldReceive('getServiceStatus')->once()->andReturn(
-            new HealthCheckResponse(403, 'negative response')
-        );
+        $service2HealthCheckResponse = new HealthCheckResponse(403, 'negative response');
+        $service2HealthCheckResponse->setDebugMode(true);
+        $service2DebugMock->shouldReceive('getServiceStatus')->once()->andReturn($service2HealthCheckResponse);
         $service2DebugMock->setRequest(new Request('GET', 'http://service2'));
 
         $this->servicesDebugMode = [
