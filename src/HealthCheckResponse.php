@@ -65,12 +65,12 @@ class HealthCheckResponse
      */
     public function toArray(): array
     {
+        $data = self::STATUS_DOWN;
+
         if ($this->debugMode) {
             $data = $this->data;
         } elseif (($this->statusCode >= 200) && ($this->statusCode <= 226)) {
             $data = self::STATUS_UP;
-        } else {
-            $data = self::STATUS_DOWN;
         }
 
         return [
