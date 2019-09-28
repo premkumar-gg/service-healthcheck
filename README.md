@@ -1,5 +1,6 @@
-Service HealthCheck
-===================
+# Service HealthCheck
+
+[![CircleCI](https://circleci.com/gh/premkumar-gg/service-healthcheck.svg?style=svg)](https://circleci.com/gh/premkumar-gg/service-healthcheck)
 
 With  microservice architectures, these days it is important that one
 knows the health of service which in turn checks the health of its depending
