@@ -2,6 +2,8 @@
 
 [![CircleCI](https://circleci.com/gh/premkumar-gg/service-healthcheck.svg?style=svg)](https://circleci.com/gh/premkumar-gg/service-healthcheck)
 
+![Service HealthCheck](./doc/service-php-healthcheck.jpeg)
+
 With  microservice architectures, these days it is important that one
 knows the health of service which in turn checks the health of its depending
 services.
