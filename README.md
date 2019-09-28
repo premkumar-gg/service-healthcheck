@@ -2,8 +2,6 @@
 
 [![CircleCI](https://circleci.com/gh/premkumar-gg/service-healthcheck.svg?style=svg)](https://circleci.com/gh/premkumar-gg/service-healthcheck)
 
-![Service HealthCheck](./doc/service-php-healthcheck.jpeg)
-
 With  microservice architectures, these days it is important that one
 knows the health of service which in turn checks the health of its depending
 services.
@@ -11,6 +9,8 @@ services.
 This library allows one to check the health status of a PHP microservice, enabling
 it to check its depending services like APIs, databases, and caches, with 
 an easy-to-use interface.
+
+![Service HealthCheck](./doc/service-php-healthcheck.jpeg)
 
 ## Usage
 
